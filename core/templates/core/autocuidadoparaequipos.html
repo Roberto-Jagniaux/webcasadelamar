@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<section class="container text-center">
+  <h4 class="m-0 text-primary">¿Qué es un autocuidado?</h4>
+  <br>
+  <p class="pl-4  border-primary pb-5">
+    El autocuidado para equipos es un conjunto de prácticas que promueven el bienestar físico, mental y emocional 
+    de sus integrantes. Fomenta un ambiente saludable mediante la comunicación efectiva, pausas activas, gestión del 
+    estrés y apoyo mutuo. Estas acciones aumentan la motivación, productividad y cohesión grupal. Es clave para mantener un rendimiento sostenible.
+  </p>
+  <div class="row">
+      {% for x in autocuidados_u %}
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="card rounded h-100">
+                  <div class="card-body text-center">
+                    <img class="card-img-top rounded" src="{{ x.image.url }}" alt="Card image cap" 
+                    style="width: 100%; height: 200px;">
+                      <h5> {{ x.clienteA}}</h5>
+                      <p1> {{ x.lugarA}}</p1>
+                      <p1> {{ x.fechaA}}</p1>
+                      <a href="{% url 'galeria_view' x.id_a %}">Ver Galería</a>
+
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+</section>{% endblock %}

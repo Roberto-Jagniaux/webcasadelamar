@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load static %}  
+{% block content %}
+<h3>PRUEBA</h3>
+
+<section class="container">
+    <div class="row">
+        {% for x in archivos %}
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card rounded h-100">
+                    <div class="card-body text-center">
+                        <h1> {{ x.nomA}}</h1>
+                        <h2> {{ x.desA}}</h1>
+                        <a href="{{ x.file_upload.url }}" class="btn btn-primary">Descargar</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

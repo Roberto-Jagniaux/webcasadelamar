@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load static %}  
+{% block content %}
+
+<section class="text-center">
+    <div>
+        {% for x in archivos %}
+            <div>
+                <div>
+                    <div>
+                        <p1> {{ x.nomA}} {{ x.desA}}</p1> <a href="{{ x.file_upload.url }}" class="btn btn-primary">Descargar</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
