@@ -8,9 +8,22 @@
 <section id="galeria" class="container pb-5" style="padding: 25px;"> 
     <div class="row">
         {% for imagen in imagenes %}
-            <div class="col-lg-4 col-md-6 col-sm-12 pb-4"> <!-- Cambié pb-5 a pb-4 para un poco más de separación -->
-                <div class="imagen" style="width: 100%; height: auto; margin-bottom: 20px;"> <!-- Ajusta el margen aquí -->
-                    <img src="{{ imagen.image.url }}" alt="Imagen de {{ autocuidado.clienteA }}" class="img-fluid" style="width: 100%; height: auto;">
+            <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
+                <div class="imagen" style="width: 100%; height: auto; margin-bottom: 20px;">
+                    <!-- Cada imagen tiene un identificador único -->
+                    <img src="{{ imagen.image.url }}" alt="Imagen de {{ autocuidado.clienteA }}" class="img-fluid" style="width: 100%; height: auto;" data-bs-toggle
+                    ="modal" data-bs-target="#imageModal{{ forloop.counter }}">
+                </div>
+            </div>
+
+            <!-- Modal único para cada imagen -->
+            <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="imageModalLabel{{ forloop.counter }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <img src="{{ imagen.image.url }}" alt="Imagen de {{ autocuidado.clienteA }}" class="img-fluid">
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}

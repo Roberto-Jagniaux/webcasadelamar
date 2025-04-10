@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<section class="container text-center">
+<section class="container">
   <h4 class="m-0 text-primary">¿Qué es un autocuidado?</h4>
   <br>
   <p class="pl-4  border-primary pb-5">
@@ -16,11 +16,12 @@
               <div class="card rounded h-100">
                   <div class="card-body text-center">
                     <img class="card-img-top rounded" src="{{ x.image.url }}" alt="Card image cap" 
-                    style="width: 100%; height: 200px;">
-                      <h5> {{ x.clienteA}}</h5>
+                    style="width: 90%; height: 150px; object-fit: cover;">
+                      <h3> {{ x.clienteA}}</h3>
                       <p1> {{ x.lugarA}}</p1>
-                      <p1> {{ x.fechaA}}</p1>
-                      <a href="{% url 'galeria_view' x.id_a %}">Ver Galería</a>
+                      <p1> {{ x.fechaA|date:"F Y"|capfirst }}</p1>
+                      <br>
+                      <a target="_blank" href="{% url 'galeria_view' x.id_a %}">Ver Galería</a>
 
                   </div>
               </div>
