@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Actividades — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Talleres, escuela del buentrato y actividades de autocuidado publicadas por Casa del Amar Penco.{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-12 sm:py-16">
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-8">
+        <div>
+            <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Comunidad</h6>
+            <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3">Próximas actividades</h1>
+        </div>
+        <a href="{% url 'actividades_pasadas' %}" class="text-sm text-primary hover:underline whitespace-nowrap mt-2">
+            Ver actividades pasadas &rarr;
+        </a>
+    </div>
+
+    {% if actividades %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {% for actividad in actividades %}
+        <a href="{% url 'actividad_detalle' actividad.pk %}"
+           class="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+            {% if actividad.imagen %}
+            <img src="{{ actividad.imagen.url }}" alt="{{ actividad.titulo }}" class="w-full h-48 object-cover">
+            {% endif %}
+            <div class="p-5">
+                <span class="text-xs uppercase tracking-wide text-primary font-medium">{{ actividad.get_tipo_display }}</span>
+                <h2 class="text-xl font-semibold text-gray-900 mt-1">{{ actividad.titulo }}</h2>
+                <p class="text-sm text-gray-600 mt-2">{{ actividad.fecha }} · {{ actividad.hora }}</p>
+                <p class="text-sm text-gray-600">{{ actividad.lugar_modalidad }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                    <span class="text-sm text-gray-500">
+                        {% if actividad.cupos_disponibles > 0 %}
+                            {{ actividad.cupos_disponibles }} cupo{{ actividad.cupos_disponibles|pluralize }} disponible{{ actividad.cupos_disponibles|pluralize }}
+                        {% else %}
+                            Cupos completos · lista de espera
+                        {% endif %}
+                    </span>
+                    <span class="text-sm font-medium text-gray-900">
+                        {% if actividad.tipo_retribucion == 'gratis' %}
+                            Gratis
+                        {% elif actividad.tipo_retribucion == 'donacion' %}
+                            Donación
+                        {% else %}
+                            ${{ actividad.valor }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-600">Por ahora no hay actividades publicadas. Vuelve a revisar pronto.</p>
+    {% endif %}
+</div>
+{% endblock %}

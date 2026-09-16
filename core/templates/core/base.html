@@ -1,17 +1,34 @@
 {%load static%}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
-    <title>Casa del Amar Penco</title>
+    <title>{% block title %}Casa del Amar Penco — Psicoterapia y Buentrato en Penco{% endblock %}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta name="description" content="{% block meta_description %}Psicoterapia individual, talleres de autocuidado y Escuela para el Buentrato en Penco, con Fabiola Delgado Silva. Atención presencial y online.{% endblock %}">
 
     <!-- Favicon -->
-    <link href="{% static 'img/Log' %}" rel="icon">
+    <link href="{% static 'img/Log.jpeg' %}" rel="icon">
+
+    <!-- Open Graph / redes sociales (WhatsApp, Instagram, Facebook).
+         Bloques separados de title/meta_description a propósito: Django no
+         permite repetir un {% templatetag openblock %}block{% templatetag closeblock %} con el mismo nombre en un
+         mismo template. Casi todas las páginas heredan estos defaults tal
+         cual; el detalle de actividad los sobrescribe con datos reales
+         (título/descripción/imagen de esa actividad puntual). -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="Casa del Amar Penco">
+    <meta property="og:title" content="{% block og_title %}Casa del Amar Penco — Psicoterapia y Buentrato en Penco{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Psicoterapia individual, talleres de autocuidado y Escuela para el Buentrato en Penco, con Fabiola Delgado Silva. Atención presencial y online.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Log.jpeg' %}{% endblock %}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Casa del Amar Penco — Psicoterapia y Buentrato en Penco{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Psicoterapia individual, talleres de autocuidado y Escuela para el Buentrato en Penco, con Fabiola Delgado Silva. Atención presencial y online.{% endblock %}">
 
     <!-- Google Web Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +36,27 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
-    <!-- JavaScript Libraries -->
+    <!-- Tailwind CSS (migración gradual desde Bootstrap4 — ver CLAUDE.md).
+         Play CDN: sirve para desarrollo mientras no haya Node instalado en el
+         entorno para armar un build real; reemplazar antes de Fase 4 (lanzamiento). -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F9A392',
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.1/cdn.min.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
+
+    <!-- JavaScript Libraries (se mantienen: las usan autocuidados/galería y
+         recursos gratuitos, que todavía no se migraron a Tailwind) -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>
@@ -29,10 +66,6 @@
     <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
     <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
     <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
-
-    <!-- Contact Javascript File -->
-    <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
-    <script src="{% static 'mail/contact.js' %}"></script>
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
@@ -47,144 +80,157 @@
 
 </head>
 
-<body>
-    <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
-            <img src="{% static 'img/Log.jpeg' %}" alt="Logo" style="width: 100px; height: auto;">
-            <a href="/" class="navbar-brand ml-lg-3">
-                <h1 class="m-0 text-primary"> Casa del Amar Penco</h1>
-            </a>
+<body id="top" class="bg-white text-gray-800">
+    <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="/" class="flex items-center gap-3 shrink-0">
+                    <img src="{% static 'img/Log.jpeg' %}" alt="Logo" class="h-12 w-12 rounded-full object-cover">
+                    <span class="text-base sm:text-xl font-semibold text-primary leading-tight">Casa del Amar Penco</span>
+                </a>
 
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
-                <div class="navbar-nav m-auto py-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
-                </li>
+                <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
+                    <a href="/" class="text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
+                    <a href="/escuelaparaelbuentrato" class="text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
+                    <a href="/autocuidadoparaequipos" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
+                    <a href="/psicoterapia" class="text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
+                    <a href="/recursosgratuitos" class="text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
+                    <a href="{% url 'actividades' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
+                    <a href="/contact" class="text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
+                    <a href="{% url 'reservar' %}" class="text-sm font-medium bg-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition">Reservar hora</a>
+                </nav>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/escuelaparaelbuentrato">Escuela para el Buentrato </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/autocuidadoparaequipos">Autocuidado para equipos</a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/psicoterapia"> Psicoterapia </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/recursosgratuitos"> Recursos gratuitos </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contáctanos</a>
-                </li>
-                </ul>
+                <button type="button" class="lg:hidden p-2 -mr-2 text-gray-700" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
+                    <i class="fas fa-bars text-xl" x-show="!mobileMenuOpen"></i>
+                    <i class="fas fa-times text-xl" x-show="mobileMenuOpen" x-cloak></i>
+                </button>
+            </div>
+        </div>
 
-
-                </div>
+        <nav x-show="mobileMenuOpen" x-cloak @click.outside="mobileMenuOpen = false" class="lg:hidden border-t border-gray-100 bg-white">
+            <div class="flex flex-col px-4 py-3">
+                <a href="/" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
+                <a href="/escuelaparaelbuentrato" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
+                <a href="/autocuidadoparaequipos" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
+                <a href="/psicoterapia" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
+                <a href="/recursosgratuitos" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
+                <a href="{% url 'actividades' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
+                <a href="/contact" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
+                <a href="{% url 'reservar' %}" class="mt-2 mb-1 text-center text-sm font-medium bg-primary text-white px-4 py-2.5 rounded-lg hover:opacity-90 transition">Reservar hora</a>
             </div>
         </nav>
+    </header>
+
+    {% if messages %}
+    <div class="max-w-3xl mx-auto px-4 mt-4 space-y-2">
+        {% for message in messages %}
+        <div class="rounded-lg px-4 py-3 text-sm {% if message.tags == 'success' %}bg-green-50 text-green-800 border border-green-200{% elif message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200{% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
     </div>
-    <!-- Navbar End -->
+    {% endif %}
 
     {% block content %}
 
-    <!-- Carousel Start -->
-    <div class="container-fluid p-0 mb-5 pb-5">
-        <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <a class="carousel-control-prev" href="#header-carousel" role="button" data-slide="prev" style="position: absolute; top: 50%; transform: translateY(-50%); left: 20px;">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#header-carousel" role="button" data-slide="next" style="position: absolute; top: 50%; transform: translateY(-50%); right: 20px;">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-                
-                
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item position-relative active" style="min-height: 75vh;">
-                    <img class="position-absolute w-100 h-100" src="{% static 'img/_N6A1862.jpg' %}" style="object-fit: cover;">
-                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                        <div class="p-3" style="max-width: 900px;">
-                            <h6 class="text-white text-uppercase mb-3 animate__animated animate__fadeInDown" style="letter-spacing: 3px;">Acompañando procesos</h6>
-                            <h3 class="display-3 text-capitalize text-white mb-3">Psicoterapia</h3>
-                            <p class="mx-md-5 px-5">Acompañamiento psicológico basado en el autoconocimiento y buentrato</p>
-                            <a class="btn btn-outline-light py-3 px-4 mt-3 animate__animated animate__fadeInUp" href="/psicoterapia">Reservar</a>
-                        </div>
+    <!-- Carousel Start (Alpine, mobile-first) -->
+    <div x-data="{ slide: 0, total: 3 }" x-init="setInterval(() => slide = (slide + 1) % total, 6000)" class="relative overflow-hidden">
+        <div class="relative h-[60vh] sm:h-[70vh] lg:h-[75vh]">
+
+            <div x-show="slide === 0" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
+                <img class="absolute inset-0 w-full h-full object-cover" src="{% static 'img/_N6A1862.jpg' %}" alt="Psicoterapia">
+                <div class="absolute inset-0 bg-black/30"></div>
+                <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
+                    <div class="max-w-2xl animate__animated animate__fadeIn">
+                        <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Acompañando procesos</h6>
+                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Psicoterapia</h3>
+                        <p class="text-white/90 mb-6">Acompañamiento psicológico basado en el autoconocimiento y buentrato</p>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'reservar' %}">Reservar</a>
                     </div>
                 </div>
-                <div class="carousel-item position-relative" style="min-height: 75vh;">
-                    <img class="position-absolute w-100 h-80" src="{% static 'img/_N6A2001.jpg' %}" style="object-fit: cover;">
-                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                        <div class="p-3" style="max-width: 900px;">
-                            <h6 class="text-white text-uppercase mb-3 animate__animated animate__fadeInDown" style="letter-spacing: 3px;">Jornadas para equipos de alto desgaste</h6>
-                            <h3 class="display-3 text-capitalize text-white mb-3">Autocuidado de Equipos</h3>
-                            <p class="mx-md-5 px-5">El autocuidado va de la mano del cuidado mutuo. Solo podemos cuidar bien lo que conocemos</p>
-                            <a class="btn btn-outline-light py-3 px-4 mt-3 animate__animated animate__fadeInUp" href="/autocuidadoparaequipos">Mas información</a>
-                        </div>
+            </div>
+
+            <div x-show="slide === 1" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
+                <img class="absolute inset-0 w-full h-full object-cover" src="{% static 'img/_N6A2001.jpg' %}" alt="Autocuidado de equipos">
+                <div class="absolute inset-0 bg-black/30"></div>
+                <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
+                    <div class="max-w-2xl animate__animated animate__fadeIn">
+                        <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Jornadas para equipos de alto desgaste</h6>
+                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Autocuidado de Equipos</h3>
+                        <p class="text-white/90 mb-6">El autocuidado va de la mano del cuidado mutuo. Solo podemos cuidar bien lo que conocemos</p>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="/autocuidadoparaequipos">Más información</a>
                     </div>
                 </div>
-                <div class="carousel-item position-relative" style="min-height: 75vh;">
-                    <img class="position-absolute w-100 h-100" src="{% static 'img/_N6A1758.jpg' %}" style="object-fit: cover;">
-                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                        <div class="p-3" style="max-width: 900px;">
-                            <h6 class="text-white text-uppercase mb-3 animate__animated animate__fadeInDown" style="letter-spacing: 3px;">Escuela itinerante</h6>
-                            <h3 class="display-3 text-capitalize text-white mb-3">Escuela para el buentrato</h3>
-                            <p class="mx-md-5 px-5">Promoción del Buentrato a nivel individual, relacional y social. Experiencias individuales y formación.</p>
-                            <a class="btn btn-outline-light py-3 px-4 mt-3 animate__animated animate__fadeInUp" href="/escuelaparaelbuentrato">Mas información</a>
-                        </div>
+            </div>
+
+            <div x-show="slide === 2" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
+                <img class="absolute inset-0 w-full h-full object-cover" src="{% static 'img/_N6A1758.jpg' %}" alt="Escuela para el buentrato">
+                <div class="absolute inset-0 bg-black/30"></div>
+                <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
+                    <div class="max-w-2xl animate__animated animate__fadeIn">
+                        <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Escuela itinerante</h6>
+                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Escuela para el buentrato</h3>
+                        <p class="text-white/90 mb-6">Promoción del Buentrato a nivel individual, relacional y social. Experiencias individuales y formación.</p>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="/escuelaparaelbuentrato">Más información</a>
                     </div>
                 </div>
+            </div>
+
+            <button @click="slide = (slide - 1 + total) % total" aria-label="Anterior" class="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button @click="slide = (slide + 1) % total" aria-label="Siguiente" class="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                <button @click="slide = 0" :class="slide === 0 ? 'bg-white' : 'bg-white/40'" class="h-2 w-2 rounded-full" aria-label="Ir a la diapositiva 1"></button>
+                <button @click="slide = 1" :class="slide === 1 ? 'bg-white' : 'bg-white/40'" class="h-2 w-2 rounded-full" aria-label="Ir a la diapositiva 2"></button>
+                <button @click="slide = 2" :class="slide === 2 ? 'bg-white' : 'bg-white/40'" class="h-2 w-2 rounded-full" aria-label="Ir a la diapositiva 3"></button>
             </div>
         </div>
     </div>
     <!-- Carousel End -->
 
     {% endblock %}
+
     <!-- Footer Start -->
-    <div class="footer container-fluid position-relative bg-dark" style="margin-top: 20px;">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 pr-lg-5 mb-5">
-                    <a href="inicio.html" class="navbar-brand">
-                        <br>
-                        <h2 class="text-primary mb-3">CASA DEL AMAR PENCO</h2>
-                    </a>
-                    <p>Promovemos el buentrato personal, relacional y comunitario.</p>
-                    
-
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                <div>
+                    <h2 class="text-primary text-xl sm:text-2xl font-semibold mb-3">CASA DEL AMAR PENCO</h2>
+                    <p class="text-sm text-gray-400">Promovemos el buentrato personal, relacional y comunitario.</p>
                 </div>
-                <div class="col-lg-6 pr-lg-5 mb-5">
-                    <br>
-                    <br>
-                    <p><a target="_blank" href="https://wa.me/56982907857" style="display: flex; align-items: center;">
-                        <img src="{% static 'img/ws.png' %} " alt="WhatsApp Logo" style="width: 20px; height: 20px; margin-right: 5px;" />
-                        +56982907857</a></p>
-                    <p><a target="_blank" href="https://www.instagram.com/casadelamarpenco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
-                        style="display: flex; align-items: center;">
-                            <img src="{% static 'img/ig.png' %} " alt="ig Logo" style="width: 20px; height: 20px; margin-right: 5px;" />
-                            Instagram</a></p>   
-                            
-                    <p><a target="_blank"  href="mailto:fabidelgadosilva@gmail.com" 
-                        style="display: flex; align-items: center;">
-                            <img src="{% static 'img/gmail.png' %} " alt="ig Logo" style="width: 20px; height: 20px; margin-right: 5px;" />
-                            fabidelgadosilva@gmail.com</a></p>        
-
+                <div class="space-y-3 text-sm">
+                    <a target="_blank" href="https://wa.me/56982907857" class="flex items-center gap-2 hover:text-white">
+                        <img src="{% static 'img/ws.png' %}" alt="WhatsApp" class="w-5 h-5">
+                        +56982907857
+                    </a>
+                    <a target="_blank" href="https://www.instagram.com/casadelamarpenco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="flex items-center gap-2 hover:text-white">
+                        <img src="{% static 'img/ig.png' %}" alt="Instagram" class="w-5 h-5">
+                        Instagram
+                    </a>
+                    <a target="_blank" href="mailto:fabidelgadosilva@gmail.com" class="flex items-center gap-2 hover:text-white">
+                        <img src="{% static 'img/gmail.png' %}" alt="Gmail" class="w-5 h-5">
+                        fabidelgadosilva@gmail.com
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
     <!-- Footer End -->
 
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
+    <!-- Back to Top (se oculta mientras se escribe en un input/select/textarea,
+         para no taparlo en formularios largos en mobile) -->
+    <a href="#top"
+       x-data="{ ocultoPorFoco: false }"
+       @focusin.window="ocultoPorFoco = ['INPUT', 'SELECT', 'TEXTAREA'].includes($event.target.tagName)"
+       @focusout.window="ocultoPorFoco = false"
+       x-show="!ocultoPorFoco"
+       class="fixed bottom-6 right-6 z-40 h-12 w-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg hover:opacity-90 transition">
+        <i class="fa fa-angle-double-up"></i>
+    </a>
 
 </body>
 

@@ -19,10 +19,13 @@ from core import views as core_views
 from django.conf import settings
 from autocuidados import views as autocuidados_view
 from nuevos_recursos import views as nuevos_recursos_view
+from reservas import views as reservas_view
+from actividades import views as actividades_view
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('panel/', core_views.panel, name='panel'),
     path('', core_views.inicio, name='/inicio'),
     path('escuelaparaelbuentrato/', core_views.escuelaparaelbuentrato),
     path('contact/', core_views.contact),
@@ -30,9 +33,12 @@ urlpatterns = [
     path('recursosgratuitos/', nuevos_recursos_view.Nuevos_recursos, name='recursos'),
     path('recursosgratuitos/ansiedad/', nuevos_recursos_view.ansiedad, name='ansiedad'),
     path('recursosgratuitos/depresion/', nuevos_recursos_view.depresion, name='depresion'),
-    path('recursosgratuitos/Prueba/', nuevos_recursos_view.Prueba, name='Prueba'),
     path('autocuidadoparaequipos/', autocuidados_view.autocuidados, name='autocuidadoparaequipos'),
     path('galeria/<str:id_a>/', autocuidados_view.galeria_view, name='galeria_view'),
+    path('reservar/', reservas_view.reservar, name='reservar'),
+    path('actividades/', actividades_view.listado, name='actividades'),
+    path('actividades/pasadas/', actividades_view.pasadas, name='actividades_pasadas'),
+    path('actividades/<int:pk>/', actividades_view.detalle, name='actividad_detalle'),
 ]
   #  path('Post/', post_views.post_list, name='Post'),
    # path('about/', core_views.about),

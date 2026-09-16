@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}  
 {% block content %}
+<h3 class="text-center mt-4">Ansiedad</h3>
 
 <section class="text-center">
     <div>
@@ -8,7 +9,7 @@
             <div>
                 <div>
                     <div>
-                        <p1> {{ x.nomA}} {{ x.desA}}</p1> <a href="{{ x.file_upload.url }}" class="btn btn-primary">Descargar</a>
+                        <p> {{ x.nomA}} {{ x.desA}}</p> <a href="{{ x.file_upload.url }}" class="btn btn-primary">Descargar</a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex items-center justify-between gap-4 flex-wrap mb-10">
+        <div>
+            <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Panel de gestión</h6>
+            <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3">Lo que necesita tu atención</h1>
+        </div>
+        <a href="/admin/" class="text-sm text-primary hover:underline">Ir al admin completo &rarr;</a>
+    </div>
+
+    <!-- Reservas pendientes -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Reservas pendientes de confirmar
+            <span class="ml-2 inline-block bg-amber-100 text-amber-800 text-sm font-medium px-2.5 py-0.5 rounded-full align-middle">{{ reservas_pendientes|length }}</span>
+        </h2>
+        {% if reservas_pendientes %}
+        <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+            {% for reserva in reservas_pendientes %}
+            <a href="/admin/reservas/reserva/{{ reserva.pk }}/change/" class="flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50 transition">
+                <div>
+                    <p class="font-medium text-gray-900">{{ reserva.cliente.nombre }}</p>
+                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha }} {{ reserva.hora }} · {{ reserva.get_modalidad_display }}</p>
+                </div>
+                <span class="text-sm text-primary whitespace-nowrap">Revisar &rarr;</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-sm">No hay reservas pendientes por confirmar.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pago sin coordinar -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Confirmadas sin pago coordinado
+            <span class="ml-2 inline-block bg-amber-100 text-amber-800 text-sm font-medium px-2.5 py-0.5 rounded-full align-middle">{{ reservas_sin_pago|length }}</span>
+        </h2>
+        {% if reservas_sin_pago %}
+        <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+            {% for reserva in reservas_sin_pago %}
+            <div class="flex items-center justify-between gap-4 px-5 py-4">
+                <a href="/admin/reservas/reserva/{{ reserva.pk }}/change/" class="hover:underline">
+                    <p class="font-medium text-gray-900">{{ reserva.cliente.nombre }}</p>
+                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha }} {{ reserva.hora }}</p>
+                </a>
+                {% if reserva.link_whatsapp %}
+                <a href="{{ reserva.link_whatsapp }}" target="_blank" class="text-sm bg-primary text-white px-3 py-1.5 rounded-lg whitespace-nowrap hover:opacity-90 transition">
+                    WhatsApp
+                </a>
+                {% else %}
+                <span class="text-xs text-gray-400 whitespace-nowrap">sin teléfono</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-sm">No hay reservas confirmadas con el pago sin coordinar.</p>
+        {% endif %}
+    </div>
+
+    <!-- Actividades con lista de espera -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Actividades con lista de espera
+            <span class="ml-2 inline-block bg-amber-100 text-amber-800 text-sm font-medium px-2.5 py-0.5 rounded-full align-middle">{{ actividades_con_espera|length }}</span>
+        </h2>
+        {% if actividades_con_espera %}
+        <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+            {% for actividad in actividades_con_espera %}
+            <a href="/admin/actividades/actividad/{{ actividad.pk }}/change/" class="flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50 transition">
+                <div>
+                    <p class="font-medium text-gray-900">{{ actividad.titulo }}</p>
+                    <p class="text-sm text-gray-600">{{ actividad.fecha }} · {{ actividad.cupos_disponibles }} cupos disponibles</p>
+                </div>
+                <span class="text-sm text-primary whitespace-nowrap">{{ actividad.en_lista_espera }} en espera &rarr;</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-sm">Ninguna actividad próxima tiene lista de espera.</p>
+        {% endif %}
+    </div>
+
+    <!-- Accesos directos -->
+    <div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Accesos directos</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <a href="/admin/reservas/reserva/" class="bg-gray-50 hover:bg-gray-100 rounded-xl p-4 text-center transition">
+                <span class="block text-sm font-medium text-gray-900">Reservas</span>
+            </a>
+            <a href="/admin/actividades/actividad/" class="bg-gray-50 hover:bg-gray-100 rounded-xl p-4 text-center transition">
+                <span class="block text-sm font-medium text-gray-900">Actividades</span>
+            </a>
+            <a href="/admin/reservas/bloqueofecha/" class="bg-gray-50 hover:bg-gray-100 rounded-xl p-4 text-center transition">
+                <span class="block text-sm font-medium text-gray-900">Bloqueo de fechas</span>
+            </a>
+            <a href="/admin/reservas/cliente/" class="bg-gray-50 hover:bg-gray-100 rounded-xl p-4 text-center transition">
+                <span class="block text-sm font-medium text-gray-900">Clientes</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

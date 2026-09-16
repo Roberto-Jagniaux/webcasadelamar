@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}{{ actividad.titulo }} — Casa del Amar Penco{% endblock %}
+{% block meta_description %}{{ actividad.descripcion|truncatewords:30 }}{% endblock %}
+{% block og_title %}{{ actividad.titulo }}{% endblock %}
+{% block og_description %}{{ actividad.descripcion|truncatewords:30 }}{% endblock %}
+{% block og_image %}{% if actividad.imagen %}{{ request.scheme }}://{{ request.get_host }}{{ actividad.imagen.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Log.jpeg' %}{% endif %}{% endblock %}
+{% block twitter_title %}{{ actividad.titulo }}{% endblock %}
+{% block twitter_description %}{{ actividad.descripcion|truncatewords:30 }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+    <a href="{% url 'actividades' %}" class="text-sm text-primary hover:underline">&larr; Volver a actividades</a>
+
+    {% if actividad.imagen %}
+    <img src="{{ actividad.imagen.url }}" alt="{{ actividad.titulo }}" class="w-full h-64 object-cover rounded-xl mt-4">
+    {% endif %}
+
+    <div class="flex items-center justify-between gap-4 mt-6">
+        <span class="inline-block text-xs uppercase tracking-widest text-primary font-medium">{{ actividad.get_tipo_display }}</span>
+        <a href="https://wa.me/?text={{ mensaje_compartir|urlencode }}" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-primary">
+            <i class="fab fa-whatsapp"></i> Compartir
+        </a>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-1 mb-4">{{ actividad.titulo }}</h1>
+
+    <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 mb-6">
+        <span>{{ actividad.fecha }} · {{ actividad.hora }}</span>
+        <span>{{ actividad.lugar_modalidad }}</span>
+        <span>Dirigido a: {{ actividad.publico_objetivo }}</span>
+        <span>
+            {% if actividad.tipo_retribucion == 'gratis' %}Gratis
+            {% elif actividad.tipo_retribucion == 'donacion' %}Donación sugerida{% if actividad.valor %}: ${{ actividad.valor }}{% endif %}
+            {% else %}${{ actividad.valor }}{% endif %}
+        </span>
+    </div>
+
+    <p class="text-gray-700 leading-relaxed whitespace-pre-line mb-10">{{ actividad.descripcion }}</p>
+
+    <div class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+        {% if actividad.es_pasada %}
+        <p class="text-sm text-gray-600">Esta actividad ya finalizó, las inscripciones están cerradas.</p>
+        {% else %}
+        {% if actividad.cupos_disponibles > 0 %}
+        <p class="text-sm text-gray-600 mb-4">{{ actividad.cupos_disponibles }} cupo{{ actividad.cupos_disponibles|pluralize }} disponible{{ actividad.cupos_disponibles|pluralize }}.</p>
+        {% else %}
+        <p class="text-sm text-amber-700 mb-4">Los cupos están completos. Si te inscribes, quedarás en lista de espera.</p>
+        {% endif %}
+
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Inscríbete</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <p class="text-sm text-red-600">{{ form.non_field_errors.0 }}</p>
+            {% endif %}
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.nombre.id_for_label }}">Nombre completo</label>
+                {{ form.nombre }}
+                {% for error in form.nombre.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.email.id_for_label }}">Correo electrónico</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.telefono.id_for_label }}">Teléfono</label>
+                    {{ form.telefono }}
+                    {% for error in form.telefono.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.convenio.id_for_label }}">Convenio</label>
+                {{ form.convenio }}
+            </div>
+
+            <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-white font-medium px-6 py-3 rounded-lg transition">
+                Confirmar inscripción
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

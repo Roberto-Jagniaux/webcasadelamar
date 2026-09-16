@@ -12,7 +12,7 @@ def Nuevos_recursos(request):
     
 
 def ansiedad(request):
-    categoria = get_object_or_404(nuevos_recursosModel, nomM='Ansiedad')
+    categoria = get_object_or_404(nuevos_recursosModel, nomM__iexact='Ansiedad')
     ansiedadR = nuevos_recursosModel.objects.all()  # Usa el alias del modelo
     archivos_ansiedad = archivos_Model.objects.filter(categoria=categoria)
 
@@ -20,17 +20,9 @@ def ansiedad(request):
     return render(request, "core/recursosgratuitos/ansiedad.html", {'ansiedadR': ansiedadR,'archivos':archivos_ansiedad})
 
 
-def Prueba(request):
-    categoria = get_object_or_404(nuevos_recursosModel, nomM='Prueba')
-    PruebaR = nuevos_recursosModel.objects.all()  # Usa el alias del modelo
-    archivos_prueba = archivos_Model.objects.filter(categoria=categoria)
-
-    
-    return render(request, "core/recursosgratuitos/Prueba.html", {'PruebaR': PruebaR,'archivos':archivos_prueba})    
-
 def depresion(request):
     # Obtener el objeto de la categoría 'depresión'
-    categoria = get_object_or_404(nuevos_recursosModel, nomM='depresión')
+    categoria = get_object_or_404(nuevos_recursosModel, nomM__iexact='depresión')
     
     # Filtrar archivos por esta categoría
     archivos_depresion = archivos_Model.objects.filter(categoria=categoria)

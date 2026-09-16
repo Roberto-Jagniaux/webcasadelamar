@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Reservar hora — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Reserva tu hora de psicoterapia individual, taller grupal o autocuidado con Fabiola Delgado Silva, en Penco o de forma online.{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12 sm:py-16">
+    <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Agenda</h6>
+    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-2">Reserva tu hora</h1>
+    <p class="text-gray-600 mb-8">
+        Completa el formulario y Fabiola se pondrá en contacto contigo para confirmar
+        la hora y coordinar el pago.
+    </p>
+
+    <form method="post" class="space-y-5" x-data="{ fecha: '', bloqueadas: {{ fechas_bloqueadas_json|safe }} }">
+        {% csrf_token %}
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.nombre.id_for_label }}">Nombre completo</label>
+            {{ form.nombre }}
+            {% for error in form.nombre.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.email.id_for_label }}">Correo electrónico</label>
+                {{ form.email }}
+                {% for error in form.email.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.telefono.id_for_label }}">Teléfono</label>
+                {{ form.telefono }}
+                {% for error in form.telefono.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.convenio.id_for_label }}">Convenio</label>
+            {{ form.convenio }}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.tipo_sesion.id_for_label }}">Tipo de sesión</label>
+                {{ form.tipo_sesion }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.modalidad.id_for_label }}">Modalidad</label>
+                {{ form.modalidad }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.fecha.id_for_label }}">Fecha solicitada</label>
+                {{ form.fecha }}
+                {% for error in form.fecha.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+                <p x-show="bloqueadas.includes(fecha)" x-cloak class="text-sm text-amber-700 mt-1">
+                    Esa fecha no está disponible. Elige otra.
+                </p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.hora.id_for_label }}">Hora solicitada</label>
+                {{ form.hora }}
+                {% for error in form.hora.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-white font-medium px-6 py-3 rounded-lg transition">
+            Enviar solicitud
+        </button>
+    </form>
+</div>
+{% endblock %}

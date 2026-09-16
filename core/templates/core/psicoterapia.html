@@ -1,1 +1,53 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Psicoterapia individual — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Psicoterapia individual con Fabiola Delgado Silva: acompañamiento psicológico basado en el autoconocimiento y el buentrato, presencial en Penco u online.{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Psicoterapia</h6>
+    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-4">Psicoterapia individual</h1>
+    <p class="text-gray-600 leading-relaxed mb-10">
+        Acompañamiento psicológico basado en el autoconocimiento y el buentrato,
+        para procesos de exploración personal, relacional y de sexualidad.
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-14">
+        <div class="lg:col-span-2">
+            <h2 class="text-xl font-semibold text-gray-900 mb-3">Sobre el acompañamiento</h2>
+            <p class="text-gray-600 leading-relaxed mb-4">
+                Fabiola Andrea Delgado Silva es psicóloga (Universidad de Concepción)
+                con un enfoque holístico, y magíster en autoconocimiento, sexualidad y
+                relaciones humanas del Instituto de Terapia de Reencuentro (Valencia,
+                España). Desde ahí, la psicoterapia individual busca ser un espacio de
+                acompañamiento respetuoso para conocerte mejor y trabajar lo que traes,
+                a tu ritmo.
+            </p>
+            <p class="text-gray-600 leading-relaxed">
+                Las sesiones duran 60 minutos y pueden ser presenciales, en Chacabuco
+                430, Penco, u online, según lo que te acomode.
+            </p>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 h-fit">
+            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Detalles de la sesión</h3>
+            <dl class="space-y-3 text-sm text-gray-600">
+                <div>
+                    <dt class="font-medium text-gray-900">Duración</dt>
+                    <dd>60 minutos</dd>
+                </div>
+                <div>
+                    <dt class="font-medium text-gray-900">Modalidad</dt>
+                    <dd>Presencial (Chacabuco 430, Penco) u online</dd>
+                </div>
+                <div>
+                    <dt class="font-medium text-gray-900">Convenios</dt>
+                    <dd>Particular, Fonasa, Isapre y seguros</dd>
+                </div>
+            </dl>
+            <a href="{% url 'reservar' %}" class="mt-6 block text-center bg-primary text-white font-medium px-4 py-3 rounded-lg hover:opacity-90 transition">
+                Reservar hora
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
