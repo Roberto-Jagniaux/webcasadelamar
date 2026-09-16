@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Node
+node_modules/
+
+# Base de datos local (contiene datos personales de clientes — no va a git,
+# ver estrategia de respaldo en CLAUDE.md)
+db.sqlite3
+db.PortalN
+
+# Archivos subidos por usuarios (imágenes de actividades, galería, etc.)
+media/
+
+# Respaldos generados por manage.py respaldo
+backups/
+
+# Configuración local / secretos
+.env
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
