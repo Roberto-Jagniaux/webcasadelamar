@@ -34,7 +34,6 @@ urlpatterns = [
     path('recursosgratuitos/', nuevos_recursos_view.Nuevos_recursos, name='recursos'),
     path('recursosgratuitos/ansiedad/', nuevos_recursos_view.ansiedad, name='ansiedad'),
     path('recursosgratuitos/depresion/', nuevos_recursos_view.depresion, name='depresion'),
-    path('autocuidadoparaequipos/', autocuidados_view.autocuidados, name='autocuidadoparaequipos'),
     path('galeria/<str:id_a>/', autocuidados_view.galeria_view, name='galeria_view'),
     path('reservar/', reservas_view.reservar, name='reservar'),
     path('actividades/', actividades_view.listado, name='actividades'),

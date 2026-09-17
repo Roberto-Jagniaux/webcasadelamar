@@ -10,26 +10,21 @@
         <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-gray-900 mt-3">Formas de acompañarte</h2>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <a href="{% url 'autocuidado' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
-            <i class="fas fa-spa text-gray-900 text-2xl mb-4"></i>
-            <h3 class="font-semibold text-gray-900 mb-2">Autocuidados</h3>
-            <p class="text-sm text-gray-600">Sesiones individuales, a la medida de lo que necesites en cada momento.</p>
-        </a>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <a href="{% url 'psicoterapia' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
             <i class="fas fa-comments text-gray-900 text-2xl mb-4"></i>
             <h3 class="font-semibold text-gray-900 mb-2">Psicoterapia individual</h3>
             <p class="text-sm text-gray-600">Acompañamiento psicológico basado en el autoconocimiento y el buentrato.</p>
         </a>
+        <a href="{% url 'autocuidado' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <i class="fas fa-users text-gray-900 text-2xl mb-4"></i>
+            <h3 class="font-semibold text-gray-900 mb-2">Autocuidado para equipos</h3>
+            <p class="text-sm text-gray-600">Jornadas grupales para equipos de alto desgaste y cuidado mutuo.</p>
+        </a>
         <a href="{% url 'escuelaparaelbuentrato' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
             <i class="fas fa-graduation-cap text-gray-900 text-2xl mb-4"></i>
             <h3 class="font-semibold text-gray-900 mb-2">Escuela para el Buentrato</h3>
             <p class="text-sm text-gray-600">Promoción del buentrato a nivel individual, relacional y social.</p>
-        </a>
-        <a href="{% url 'autocuidadoparaequipos' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
-            <i class="fas fa-users text-gray-900 text-2xl mb-4"></i>
-            <h3 class="font-semibold text-gray-900 mb-2">Autocuidado para equipos</h3>
-            <p class="text-sm text-gray-600">Jornadas para equipos de alto desgaste y cuidado mutuo.</p>
         </a>
     </div>
 </div>

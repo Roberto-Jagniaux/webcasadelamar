@@ -1,16 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from .models import autocuidados as autocuidados_a  # Cambia el alias del modelo
-from .models import galeria as galeria_a 
-
-
-def autocuidados(request):
-    # Obtén todos los objetos del modelo usando el alias
-    autocuidados_u = autocuidados_a.objects.all()  
-
-    # Renderiza la plantilla y pasa el contexto con el nombre 'autocuidados_u'
-    return render(request, "core/autocuidadoparaequipos.html", {'autocuidados_u': autocuidados_u})
-
-
+from .models import galeria as galeria_a
 
 
 

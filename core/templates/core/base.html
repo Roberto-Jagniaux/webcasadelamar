@@ -41,51 +41,29 @@
          Play CDN: sirve para desarrollo mientras no haya Node instalado en el
          entorno para armar un build real; reemplazar antes de Fase 4 (lanzamiento). -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#F9A392',
-                    },
-                    fontFamily: {
-                        // Antes llegaba heredado desde 1style.css (la hoja de
-                        // Bootstrap que el roadmap planea eliminar en la
-                        // migración a Tailwind) — declarado acá para que no
-                        // dependa de un archivo que va a desaparecer.
-                        sans: ['Poppins', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-                        // Voz editorial: títulos, nombre de marca, headline del
-                        // carrusel. No se usa en formularios, fechas ni texto
-                        // legal — esos siguen en Poppins (font-sans, el default).
-                        serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
-                    },
-                },
-            },
-        }
-    </script>
+
+    <!-- Configuración de Tailwind + componentes de Alpine.js del sitio.
+         Va sin "defer" y ANTES del script de Alpine: fija tailwind.config
+         antes del primer escaneo del DOM, y registra los componentes de
+         Alpine antes de que Alpine dispare "alpine:init". -->
+    <script src="{% static 'js/site.js' %}"></script>
+
     <!-- Alpine.js -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.1/cdn.min.js"></script>
-    <style>[x-cloak] { display: none !important; }</style>
 
-    <!-- JavaScript Libraries (se mantienen: las usan autocuidados/galería y
-         recursos gratuitos, que todavía no se migraron a Tailwind) -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
-    <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
-    <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <!-- Librerías de jQuery/Bootstrap/owlCarousel/tempusdominus/main.js
+         (jQuery, dropdowns, datepicker, carruseles, contador) se sacaron de
+         acá: no queda ningún elemento en el sitio que las use — todo el
+         markup que las necesitaba (galería con modal Bootstrap, date/time
+         picker, categorías de recursos con Bootstrap grid) ya se migró a
+         Tailwind + Alpine. Verificado buscando cada selector que dependía
+         de ellas (data-toggle, .owl-carousel, #date/#time, [data-toggle=
+         "counter-up"], col-lg-/card/btn de Bootstrap) en todo el proyecto:
+         cero coincidencias. -->
 
-    <!-- Template Javascript -->
-    <script src="{% static 'js/main.js' %}"></script>
-
-    <!-- Libraries Stylesheet -->
+    <!-- Animate.css: sigue en uso (animate__animated/animate__fadeIn en el
+         carrusel del home). -->
     <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'css/1style.css' %}" rel="stylesheet">
@@ -93,7 +71,7 @@
 </head>
 
 <body id="top" class="bg-white text-gray-800">
-    <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white shadow-sm">
+    <header x-data="mobileMenu" class="sticky top-0 z-50 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between gap-6 h-20">
                 <a href="{% url 'inicio' %}" class="flex items-center gap-3 shrink-0">
@@ -104,9 +82,8 @@
                 <nav class="hidden xl:flex items-center gap-5 2xl:gap-7">
                     <a href="{% url 'inicio' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
                     <a href="{% url 'escuelaparaelbuentrato' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
-                    <a href="{% url 'autocuidadoparaequipos' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
                     <a href="{% url 'psicoterapia' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
-                    <a href="{% url 'autocuidado' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidados</a>
+                    <a href="{% url 'autocuidado' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
                     <a href="{% url 'recursos' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
                     <a href="{% url 'actividades' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
                     <a href="{% url 'contact' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
@@ -124,9 +101,8 @@
             <div class="flex flex-col px-4 py-3">
                 <a href="{% url 'inicio' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
                 <a href="{% url 'escuelaparaelbuentrato' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
-                <a href="{% url 'autocuidadoparaequipos' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
                 <a href="{% url 'psicoterapia' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
-                <a href="{% url 'autocuidado' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidados</a>
+                <a href="{% url 'autocuidado' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
                 <a href="{% url 'recursos' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
                 <a href="{% url 'actividades' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
                 <a href="{% url 'contact' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
@@ -148,7 +124,7 @@
     {% block content %}
 
     <!-- Carousel Start (Alpine, mobile-first) -->
-    <div x-data="{ slide: 0, total: 3 }" x-init="setInterval(() => slide = (slide + 1) % total, 6000)" class="relative overflow-hidden">
+    <div x-data="heroCarousel" class="relative overflow-hidden">
         <div class="relative h-[60vh] sm:h-[70vh] lg:h-[75vh]">
 
             <div x-show="slide === 0" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
@@ -172,7 +148,7 @@
                         <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Jornadas para equipos de alto desgaste</h6>
                         <h3 class="font-serif text-3xl sm:text-5xl font-semibold text-white mb-4">Autocuidado de Equipos</h3>
                         <p class="text-white/90 mb-6">El autocuidado va de la mano del cuidado mutuo. Solo podemos cuidar bien lo que conocemos</p>
-                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'autocuidadoparaequipos' %}">Más información</a>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'autocuidado' %}">Más información</a>
                     </div>
                 </div>
             </div>
@@ -238,24 +214,10 @@
     <!-- Back to Top: se oculta cada vez que su posición fija (esquina inferior
          derecha) coincide con un campo de formulario o con el footer, sin
          depender de que haya foco activo (cubre el caso de que ya tape algo
-         apenas carga la página, antes de que el usuario toque nada). -->
+         apenas carga la página, antes de que el usuario toque nada). Lógica
+         del componente "backToTop" en static/js/site.js. -->
     <a href="#top"
-       x-data="{
-           oculto: false,
-           actualizar() {
-               const margen = 24, tam = 48;
-               const boton = {
-                   left: window.innerWidth - margen - tam,
-                   right: window.innerWidth - margen,
-                   top: window.innerHeight - margen - tam,
-                   bottom: window.innerHeight - margen,
-               };
-               this.oculto = Array.from(document.querySelectorAll('input, select, textarea, footer, .campo-seleccionable')).some((el) => {
-                   const r = el.getBoundingClientRect();
-                   return !(boton.right < r.left || boton.left > r.right || boton.bottom < r.top || boton.top > r.bottom);
-               });
-           },
-       }"
+       x-data="backToTop"
        x-init="actualizar()"
        @focusin.window="actualizar()"
        @focusout.window="actualizar()"

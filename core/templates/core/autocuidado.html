@@ -1,29 +1,27 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Autocuidados — Casa del Amar Penco{% endblock %}
-{% block meta_description %}Sesiones de autocuidado individual con Fabiola Delgado Silva, en Penco u online. Duración y modalidad se ajustan a lo que necesites.{% endblock %}
+{% block title %}Autocuidado para equipos — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Autocuidado para equipos con Fabiola Delgado Silva: jornadas grupales para promover el bienestar físico, mental y emocional de tu equipo, en Penco u online.{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Autocuidado</h6>
-    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-4">Autocuidados</h1>
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Autocuidado para equipos</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-4">Autocuidado para equipos</h1>
     <p class="text-gray-600 leading-relaxed mb-10">
-        Sesiones de autocuidado individual con Fabiola Delgado Silva, distintas del
-        proceso de psicoterapia, pensadas a la medida de lo que necesites en ese
-        momento.
+        El autocuidado es siempre un trabajo grupal: jornadas pensadas para equipos,
+        no para procesos individuales (para eso está la
+        <a href="{% url 'psicoterapia' %}" class="text-gray-900 font-medium hover:underline">psicoterapia individual</a>).
     </p>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-14">
         <div class="lg:col-span-2">
-            <h2 class="text-xl font-semibold text-gray-900 mb-3">Sobre este espacio</h2>
-            <p class="text-gray-600 leading-relaxed mb-4">
-                Contenido en preparación: Fabiola está terminando de definir cómo se
-                estructura este espacio (qué incluye, para quién es y cómo se diferencia
-                de una sesión de psicoterapia). Mientras tanto, puedes reservar tu hora
-                y conversar los detalles directamente con ella.
-            </p>
+            <h2 class="text-xl font-semibold text-gray-900 mb-3">¿Qué es un autocuidado?</h2>
             <p class="text-gray-600 leading-relaxed">
-                Las sesiones pueden ser presenciales, en Chacabuco 430, Penco, u online,
-                según lo que te acomode.
+                El autocuidado para equipos es un conjunto de prácticas que promueven el
+                bienestar físico, mental y emocional de sus integrantes. Fomenta un
+                ambiente saludable mediante la comunicación efectiva, pausas activas,
+                gestión del estrés y apoyo mutuo. Estas acciones aumentan la motivación,
+                productividad y cohesión grupal. Es clave para mantener un rendimiento
+                sostenible.
             </p>
         </div>
 
@@ -72,5 +70,29 @@
             </a>
         </div>
     </div>
+
+    {% if autocuidados_u %}
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Jornadas anteriores</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for x in autocuidados_u %}
+        <a href="{% url 'galeria_view' x.id_a %}" target="_blank"
+           class="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+            <img src="{{ x.image.url }}" alt="Jornada de autocuidado — {{ x.clienteA }}" class="w-full h-44 object-cover">
+            <div class="p-5">
+                <h3 class="font-semibold text-gray-900 mb-2">{{ x.clienteA }}</h3>
+                <p class="text-sm text-gray-600 flex items-center gap-1.5">
+                    <i class="fas fa-map-marker-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ x.lugarA }}
+                </p>
+                <p class="text-sm text-gray-600 flex items-center gap-1.5 mb-3">
+                    <i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ x.fechaA|date:"F Y"|capfirst }}
+                </p>
+                <span class="text-sm text-gray-900 font-medium inline-flex items-center gap-1.5">
+                    Ver galería <i class="fas fa-arrow-right text-xs"></i>
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

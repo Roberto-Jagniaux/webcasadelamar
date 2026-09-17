@@ -1,32 +1,38 @@
 {% extends 'core/base.html' %}
-
+{% block title %}{{ autocuidado.clienteA }} — Autocuidado para equipos — Casa del Amar Penco{% endblock %}
 {% block content %}
-<div style="text-align: center;">
-    <h4>{{ autocuidado.clienteA }}</h4>
-    <h5>{{ autocuidado.formatted_desA|safe }}</h5>
-</div>
-<section id="galeria" class="container pb-5" style="padding: 25px;"> 
-    <div class="row">
-        {% for imagen in imagenes %}
-            <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
-                <div class="imagen" style="width: 100%; height: auto; margin-bottom: 20px;">
-                    <!-- Cada imagen tiene un identificador único -->
-                    <img src="{{ imagen.image.url }}" alt="Imagen de {{ autocuidado.clienteA }}" class="img-fluid" style="width: 100%; height: auto;" data-bs-toggle
-                    ="modal" data-bs-target="#imageModal{{ forloop.counter }}">
-                </div>
-            </div>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20" x-data="galeriaLightbox">
+    <a href="{% url 'autocuidado' %}" class="text-sm text-gray-900 hover:underline">&larr; Autocuidado para equipos</a>
 
-            <!-- Modal único para cada imagen -->
-            <div class="modal fade" id="imageModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="imageModalLabel{{ forloop.counter }}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <img src="{{ imagen.image.url }}" alt="Imagen de {{ autocuidado.clienteA }}" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded mt-4">Jornada de autocuidado</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-2">{{ autocuidado.clienteA }}</h1>
+    {% if autocuidado.formatted_desA %}
+    <p class="text-gray-600 leading-relaxed mb-10">{{ autocuidado.formatted_desA|safe }}</p>
+    {% endif %}
+
+    {% if imagenes %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for imagen in imagenes %}
+        <button type="button" @click="imagenAbierta = '{{ imagen.image.url|escapejs }}'"
+                class="block w-full text-left bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+            <img src="{{ imagen.image.url }}" alt="Foto de la jornada de {{ autocuidado.clienteA }}" class="w-full h-56 object-cover">
+        </button>
         {% endfor %}
     </div>
-</section>
+    {% else %}
+    <p class="text-gray-600">Todavía no hay fotos cargadas para esta jornada.</p>
+    {% endif %}
+
+    <!-- Lightbox -->
+    <div x-show="imagenAbierta" x-cloak
+         @click="imagenAbierta = null"
+         @keydown.escape.window="imagenAbierta = null"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+        <img :src="imagenAbierta" alt="" class="max-h-[85vh] max-w-full rounded-lg shadow-2xl">
+        <button type="button" @click="imagenAbierta = null" aria-label="Cerrar"
+                class="absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+    </div>
+</div>
 {% endblock %}

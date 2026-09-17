@@ -1,0 +1,18 @@
+/* Estilos propios para templates/admin/index.html (override del indice del
+   admin de Django). Va en un archivo aparte, no en 1style.css: ese es el
+   Bootstrap completo del sitio publico y romperia el layout del admin si se
+   cargara ahi. */
+
+.panel-gestion-banner {
+  margin: 0 0 20px;
+}
+
+.panel-gestion-link {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #F9A392;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}

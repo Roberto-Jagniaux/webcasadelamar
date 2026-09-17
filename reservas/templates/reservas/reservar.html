@@ -11,7 +11,7 @@
         la hora y coordinar el pago.
     </p>
 
-    <form method="post" class="space-y-5" x-data="{ fecha: '', bloqueadas: {{ fechas_bloqueadas_json|safe }} }">
+    <form method="post" class="space-y-5" x-data='reservaForm({{ fechas_bloqueadas_json|safe }})'>
         {% csrf_token %}
 
         <div>
@@ -48,7 +48,7 @@
                         <span class="font-medium text-gray-900 text-sm">
                             {% if radio.data.value == "psicoterapia_individual" %}Psicoterapia individual
                             {% elif radio.data.value == "taller_grupal" %}Taller grupal
-                            {% elif radio.data.value == "autocuidado" %}Autocuidado
+                            {% elif radio.data.value == "autocuidado" %}Autocuidado para equipos
                             {% endif %}
                         </span>
                         <span class="text-xs text-gray-500">

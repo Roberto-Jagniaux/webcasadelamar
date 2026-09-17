@@ -52,7 +52,7 @@ class Reserva(models.Model):
     TIPO_SESION_CHOICES = [
         (TIPO_PSICOTERAPIA, "Psicoterapia individual (60 min)"),
         (TIPO_TALLER_GRUPAL, "Taller grupal (180 min)"),
-        (TIPO_AUTOCUIDADO, "Autocuidado (duración a convenir)"),
+        (TIPO_AUTOCUIDADO, "Autocuidado para equipos (duración a convenir)"),
     ]
 
     MODALIDAD_ONLINE = "online"

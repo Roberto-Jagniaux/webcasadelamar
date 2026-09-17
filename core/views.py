@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from actividades.models import Actividad
+from autocuidados.models import autocuidados as AutocuidadoEquipo
 from reservas.models import Reserva
 from reservas.services import whatsapp_link_pago
 
@@ -44,7 +45,8 @@ def psicoterapia(request):
     return render(request,"core/psicoterapia.html")
 
 def autocuidado(request):
-    return render(request,"core/autocuidado.html")
+    autocuidados_u = AutocuidadoEquipo.objects.all()
+    return render(request, "core/autocuidado.html", {"autocuidados_u": autocuidados_u})
 
 def inicio(request):
     return render(request,"core/inicio.html")
