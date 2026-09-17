@@ -1,30 +1,29 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Psicoterapia individual — Casa del Amar Penco{% endblock %}
-{% block meta_description %}Psicoterapia individual con Fabiola Delgado Silva: acompañamiento psicológico basado en el autoconocimiento y el buentrato, presencial en Penco u online.{% endblock %}
+{% block title %}Autocuidados — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Sesiones de autocuidado individual con Fabiola Delgado Silva, en Penco u online. Duración y modalidad se ajustan a lo que necesites.{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Psicoterapia</h6>
-    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-4">Psicoterapia individual</h1>
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Autocuidado</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-4">Autocuidados</h1>
     <p class="text-gray-600 leading-relaxed mb-10">
-        Acompañamiento psicológico basado en el autoconocimiento y el buentrato,
-        para procesos de exploración personal, relacional y de sexualidad.
+        Sesiones de autocuidado individual con Fabiola Delgado Silva, distintas del
+        proceso de psicoterapia, pensadas a la medida de lo que necesites en ese
+        momento.
     </p>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-14">
         <div class="lg:col-span-2">
-            <h2 class="text-xl font-semibold text-gray-900 mb-3">Sobre el acompañamiento</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-3">Sobre este espacio</h2>
             <p class="text-gray-600 leading-relaxed mb-4">
-                Fabiola Andrea Delgado Silva es psicóloga (Universidad de Concepción)
-                con un enfoque holístico, y magíster en autoconocimiento, sexualidad y
-                relaciones humanas del Instituto de Terapia de Reencuentro (Valencia,
-                España). Desde ahí, la psicoterapia individual busca ser un espacio de
-                acompañamiento respetuoso para conocerte mejor y trabajar lo que traes,
-                a tu ritmo.
+                Contenido en preparación: Fabiola está terminando de definir cómo se
+                estructura este espacio (qué incluye, para quién es y cómo se diferencia
+                de una sesión de psicoterapia). Mientras tanto, puedes reservar tu hora
+                y conversar los detalles directamente con ella.
             </p>
             <p class="text-gray-600 leading-relaxed">
-                Las sesiones duran 60 minutos y pueden ser presenciales, en Chacabuco
-                430, Penco, u online, según lo que te acomode.
+                Las sesiones pueden ser presenciales, en Chacabuco 430, Penco, u online,
+                según lo que te acomode.
             </p>
         </div>
 
@@ -37,7 +36,7 @@
                     </span>
                     <div>
                         <dt class="font-medium text-gray-900">Duración</dt>
-                        <dd>60 minutos</dd>
+                        <dd>A convenir</dd>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -58,8 +57,17 @@
                         <dd>Particular, Fonasa, Isapre y seguros</dd>
                     </div>
                 </div>
+                <div class="flex items-start gap-3">
+                    <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-gray-900">
+                        <i class="fas fa-tag text-sm"></i>
+                    </span>
+                    <div>
+                        <dt class="font-medium text-gray-900">Valor</dt>
+                        <dd>Se coordina directamente con Fabiola</dd>
+                    </div>
+                </div>
             </dl>
-            <a href="{% url 'reservar' %}" class="mt-6 block text-center bg-primary text-gray-900 font-medium px-4 py-3 rounded-lg hover:opacity-90 transition">
+            <a href="{% url 'reservar' %}?tipo=autocuidado" class="mt-6 block text-center bg-primary text-gray-900 font-medium px-4 py-3 rounded-lg hover:opacity-90 transition">
                 Reservar hora
             </a>
         </div>

@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 py-12 sm:py-16">
-    <a href="{% url 'actividades' %}" class="text-sm text-primary hover:underline">&larr; Próximas actividades</a>
+    <a href="{% url 'actividades' %}" class="text-sm text-gray-900 hover:underline">&larr; Próximas actividades</a>
 
-    <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded mt-4">Comunidad</h6>
-    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-8">Actividades pasadas</h1>
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded mt-4">Comunidad</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-8">Actividades pasadas</h1>
 
     {% if actividades %}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -18,8 +18,8 @@
             <div class="p-5">
                 <span class="text-xs uppercase tracking-wide text-gray-500 font-medium">{{ actividad.get_tipo_display }}</span>
                 <h2 class="text-xl font-semibold text-gray-900 mt-1">{{ actividad.titulo }}</h2>
-                <p class="text-sm text-gray-600 mt-2">{{ actividad.fecha }} · {{ actividad.hora }}</p>
-                <p class="text-sm text-gray-600">{{ actividad.lugar_modalidad }}</p>
+                <p class="text-sm text-gray-600 mt-2 flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.fecha }} · {{ actividad.hora }}</p>
+                <p class="text-sm text-gray-600 flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.lugar_modalidad }}</p>
             </div>
         </a>
         {% endfor %}

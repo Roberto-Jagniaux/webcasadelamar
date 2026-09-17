@@ -1,22 +1,38 @@
 {% extends 'core/base.html' %}
-{% load static %}  
+{% load static %}
+{% block title %}Depresión — Recursos gratuitos — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Recursos descargables gratuitos sobre depresión, por Casa del Amar Penco.{% endblock %}
 {% block content %}
-<h3>Depresión</h3>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <a href="{% url 'recursos' %}" class="text-sm text-gray-900 hover:underline">&larr; Recursos gratuitos</a>
 
-<section class="container">
-    <div class="row">
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded mt-4">Recursos</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-10">Depresión</h1>
+
+    {% if archivos %}
+    <div class="space-y-4">
         {% for x in archivos %}
-
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card rounded h-100">
-                    <div class="card-body text-center">
-                        <h1> {{ x.nomA}}</h1>
-                        <h2> {{ x.desA}}</h2>
-                        <a href="{{ x.file_upload.url }}" class="btn btn-primary">Descargar</a>
-                    </div>
-                </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 bg-white border border-gray-200 rounded-xl p-5">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/20 text-gray-900">
+                {% if '.pdf' in x.file_upload.name|lower %}
+                <i class="fas fa-file-pdf text-xl"></i>
+                {% else %}
+                <i class="fas fa-file-alt text-xl"></i>
+                {% endif %}
+            </span>
+            <div class="flex-1 min-w-0">
+                <p class="font-semibold text-gray-900">{{ x.nomA }}</p>
+                {% if x.desA %}<p class="text-sm text-gray-600">{{ x.desA }}</p>{% endif %}
             </div>
+            <a href="{{ x.file_upload.url }}" target="_blank" rel="noopener"
+               class="shrink-0 text-center bg-primary text-gray-900 font-medium px-4 py-2 rounded-lg hover:opacity-90 transition text-sm">
+                Descargar
+            </a>
+        </div>
         {% endfor %}
     </div>
-</section>
+    {% else %}
+    <p class="text-gray-600">Todavía no hay recursos descargables para este tema.</p>
+    {% endif %}
+</div>
 {% endblock %}

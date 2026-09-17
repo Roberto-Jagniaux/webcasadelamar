@@ -6,10 +6,10 @@
 <div class="max-w-5xl mx-auto px-4 py-12 sm:py-16">
     <div class="flex items-start justify-between gap-4 flex-wrap mb-8">
         <div>
-            <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Comunidad</h6>
-            <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3">Próximas actividades</h1>
+            <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Comunidad</h6>
+            <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3">Próximas actividades</h1>
         </div>
-        <a href="{% url 'actividades_pasadas' %}" class="text-sm text-primary hover:underline whitespace-nowrap mt-2">
+        <a href="{% url 'actividades_pasadas' %}" class="text-sm text-gray-900 hover:underline whitespace-nowrap mt-2">
             Ver actividades pasadas &rarr;
         </a>
     </div>
@@ -23,10 +23,10 @@
             <img src="{{ actividad.imagen.url }}" alt="{{ actividad.titulo }}" class="w-full h-48 object-cover">
             {% endif %}
             <div class="p-5">
-                <span class="text-xs uppercase tracking-wide text-primary font-medium">{{ actividad.get_tipo_display }}</span>
+                <span class="text-xs uppercase tracking-wide text-gray-900 font-medium">{{ actividad.get_tipo_display }}</span>
                 <h2 class="text-xl font-semibold text-gray-900 mt-1">{{ actividad.titulo }}</h2>
-                <p class="text-sm text-gray-600 mt-2">{{ actividad.fecha }} · {{ actividad.hora }}</p>
-                <p class="text-sm text-gray-600">{{ actividad.lugar_modalidad }}</p>
+                <p class="text-sm text-gray-600 mt-2 flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.fecha }} · {{ actividad.hora }}</p>
+                <p class="text-sm text-gray-600 flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.lugar_modalidad }}</p>
                 <div class="mt-3 flex items-center justify-between">
                     <span class="text-sm text-gray-500">
                         {% if actividad.cupos_disponibles > 0 %}

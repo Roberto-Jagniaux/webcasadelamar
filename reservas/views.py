@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from .forms import ReservaForm
-from .models import BloqueoFecha
+from .models import BloqueoFecha, Reserva
 
 
 def reservar(request):
@@ -20,7 +20,11 @@ def reservar(request):
             )
             return redirect("reservar")
     else:
-        form = ReservaForm()
+        tipo_preseleccionado = request.GET.get("tipo")
+        initial = {}
+        if tipo_preseleccionado in dict(Reserva.TIPO_SESION_CHOICES):
+            initial["tipo_sesion"] = tipo_preseleccionado
+        form = ReservaForm(initial=initial)
 
     fechas_bloqueadas = list(
         BloqueoFecha.objects.filter(fecha__gte=timezone.now().date())

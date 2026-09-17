@@ -9,24 +9,24 @@
 {% block twitter_description %}{{ actividad.descripcion|truncatewords:30 }}{% endblock %}
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-12 sm:py-16">
-    <a href="{% url 'actividades' %}" class="text-sm text-primary hover:underline">&larr; Volver a actividades</a>
+    <a href="{% url 'actividades' %}" class="text-sm text-gray-900 hover:underline">&larr; Volver a actividades</a>
 
     {% if actividad.imagen %}
     <img src="{{ actividad.imagen.url }}" alt="{{ actividad.titulo }}" class="w-full h-64 object-cover rounded-xl mt-4">
     {% endif %}
 
     <div class="flex items-center justify-between gap-4 mt-6">
-        <span class="inline-block text-xs uppercase tracking-widest text-primary font-medium">{{ actividad.get_tipo_display }}</span>
+        <span class="inline-block text-xs uppercase tracking-widest text-gray-900 font-medium">{{ actividad.get_tipo_display }}</span>
         <a href="https://wa.me/?text={{ mensaje_compartir|urlencode }}" target="_blank" rel="noopener"
            class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-primary">
             <i class="fab fa-whatsapp"></i> Compartir
         </a>
     </div>
-    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-1 mb-4">{{ actividad.titulo }}</h1>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-1 mb-4">{{ actividad.titulo }}</h1>
 
     <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 mb-6">
-        <span>{{ actividad.fecha }} · {{ actividad.hora }}</span>
-        <span>{{ actividad.lugar_modalidad }}</span>
+        <span class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.fecha }} · {{ actividad.hora }}</span>
+        <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.lugar_modalidad }}</span>
         <span>Dirigido a: {{ actividad.publico_objetivo }}</span>
         <span>
             {% if actividad.tipo_retribucion == 'gratis' %}Gratis
@@ -78,7 +78,7 @@
                 {{ form.convenio }}
             </div>
 
-            <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-white font-medium px-6 py-3 rounded-lg transition">
+            <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-gray-900 font-medium px-6 py-3 rounded-lg transition">
                 Confirmar inscripción
             </button>
         </form>

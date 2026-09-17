@@ -26,10 +26,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', core_views.panel, name='panel'),
-    path('', core_views.inicio, name='/inicio'),
-    path('escuelaparaelbuentrato/', core_views.escuelaparaelbuentrato),
-    path('contact/', core_views.contact),
-    path('psicoterapia/', core_views.psicoterapia),
+    path('', core_views.inicio, name='inicio'),
+    path('escuelaparaelbuentrato/', core_views.escuelaparaelbuentrato, name='escuelaparaelbuentrato'),
+    path('contact/', core_views.contact, name='contact'),
+    path('psicoterapia/', core_views.psicoterapia, name='psicoterapia'),
+    path('autocuidado/', core_views.autocuidado, name='autocuidado'),
     path('recursosgratuitos/', nuevos_recursos_view.Nuevos_recursos, name='recursos'),
     path('recursosgratuitos/ansiedad/', nuevos_recursos_view.ansiedad, name='ansiedad'),
     path('recursosgratuitos/depresion/', nuevos_recursos_view.depresion, name='depresion'),
@@ -40,11 +41,6 @@ urlpatterns = [
     path('actividades/pasadas/', actividades_view.pasadas, name='actividades_pasadas'),
     path('actividades/<int:pk>/', actividades_view.detalle, name='actividad_detalle'),
 ]
-  #  path('Post/', post_views.post_list, name='Post'),
-   # path('about/', core_views.about),
-    #path('ranking/', core_views.ranking),
 
-# aca pregunto si estoy local o no
 if settings.DEBUG:
-    from django.conf.urls.static import static
-    urlpatterns +=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

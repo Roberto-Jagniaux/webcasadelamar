@@ -30,13 +30,21 @@ class ReservaForm(forms.ModelForm):
         label="Convenio",
         widget=forms.Select(attrs={"class": INPUT_CLASSES}),
     )
+    tipo_sesion = forms.ChoiceField(
+        choices=Reserva.TIPO_SESION_CHOICES,
+        label="Tipo de sesión",
+        widget=forms.RadioSelect(attrs={"class": "mt-1 h-4 w-4 accent-primary"}),
+    )
+    modalidad = forms.ChoiceField(
+        choices=[("", "Selecciona modalidad")] + list(Reserva.MODALIDAD_CHOICES),
+        label="Modalidad",
+        widget=forms.Select(attrs={"class": INPUT_CLASSES}),
+    )
 
     class Meta:
         model = Reserva
         fields = ["tipo_sesion", "modalidad", "fecha", "hora"]
         widgets = {
-            "tipo_sesion": forms.Select(attrs={"class": INPUT_CLASSES}),
-            "modalidad": forms.Select(attrs={"class": INPUT_CLASSES}),
             "fecha": forms.DateInput(
                 attrs={"type": "date", "class": INPUT_CLASSES, "x-model": "fecha"}
             ),

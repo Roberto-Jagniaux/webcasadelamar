@@ -30,8 +30,9 @@
     <meta name="twitter:title" content="{% block twitter_title %}Casa del Amar Penco — Psicoterapia y Buentrato en Penco{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Psicoterapia individual, talleres de autocuidado y Escuela para el Buentrato en Penco, con Fabiola Delgado Silva. Atención presencial y online.{% endblock %}">
 
-    <!-- Google Web Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Web Fonts: Poppins para cuerpo/formularios/fechas (voz
+         funcional), Fraunces para títulos/nombre de marca (voz editorial) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -46,6 +47,17 @@
                 extend: {
                     colors: {
                         primary: '#F9A392',
+                    },
+                    fontFamily: {
+                        // Antes llegaba heredado desde 1style.css (la hoja de
+                        // Bootstrap que el roadmap planea eliminar en la
+                        // migración a Tailwind) — declarado acá para que no
+                        // dependa de un archivo que va a desaparecer.
+                        sans: ['Poppins', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        // Voz editorial: títulos, nombre de marca, headline del
+                        // carrusel. No se usa en formularios, fechas ni texto
+                        // legal — esos siguen en Poppins (font-sans, el default).
+                        serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
                     },
                 },
             },
@@ -83,40 +95,42 @@
 <body id="top" class="bg-white text-gray-800">
     <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="/" class="flex items-center gap-3 shrink-0">
+            <div class="flex items-center justify-between gap-6 h-20">
+                <a href="{% url 'inicio' %}" class="flex items-center gap-3 shrink-0">
                     <img src="{% static 'img/Log.jpeg' %}" alt="Logo" class="h-12 w-12 rounded-full object-cover">
-                    <span class="text-base sm:text-xl font-semibold text-primary leading-tight">Casa del Amar Penco</span>
+                    <span class="font-serif text-base sm:text-xl font-semibold text-gray-900 leading-tight">Casa del Amar Penco</span>
                 </a>
 
-                <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                    <a href="/" class="text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
-                    <a href="/escuelaparaelbuentrato" class="text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
-                    <a href="/autocuidadoparaequipos" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
-                    <a href="/psicoterapia" class="text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
-                    <a href="/recursosgratuitos" class="text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
+                <nav class="hidden xl:flex items-center gap-5 2xl:gap-7">
+                    <a href="{% url 'inicio' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
+                    <a href="{% url 'escuelaparaelbuentrato' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
+                    <a href="{% url 'autocuidadoparaequipos' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
+                    <a href="{% url 'psicoterapia' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
+                    <a href="{% url 'autocuidado' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Autocuidados</a>
+                    <a href="{% url 'recursos' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
                     <a href="{% url 'actividades' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
-                    <a href="/contact" class="text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
-                    <a href="{% url 'reservar' %}" class="text-sm font-medium bg-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition">Reservar hora</a>
+                    <a href="{% url 'contact' %}" class="text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
+                    <a href="{% url 'reservar' %}" class="text-sm font-medium bg-primary text-gray-900 px-4 py-2 rounded-lg hover:opacity-90 transition shrink-0">Reservar hora</a>
                 </nav>
 
-                <button type="button" class="lg:hidden p-2 -mr-2 text-gray-700" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
+                <button type="button" class="xl:hidden p-2 -mr-2 text-gray-700" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
                     <i class="fas fa-bars text-xl" x-show="!mobileMenuOpen"></i>
                     <i class="fas fa-times text-xl" x-show="mobileMenuOpen" x-cloak></i>
                 </button>
             </div>
         </div>
 
-        <nav x-show="mobileMenuOpen" x-cloak @click.outside="mobileMenuOpen = false" class="lg:hidden border-t border-gray-100 bg-white">
+        <nav x-show="mobileMenuOpen" x-cloak @click.outside="mobileMenuOpen = false" class="xl:hidden border-t border-gray-100 bg-white">
             <div class="flex flex-col px-4 py-3">
-                <a href="/" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
-                <a href="/escuelaparaelbuentrato" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
-                <a href="/autocuidadoparaequipos" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
-                <a href="/psicoterapia" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
-                <a href="/recursosgratuitos" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
+                <a href="{% url 'inicio' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Inicio</a>
+                <a href="{% url 'escuelaparaelbuentrato' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Escuela para el Buentrato</a>
+                <a href="{% url 'autocuidadoparaequipos' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidado para equipos</a>
+                <a href="{% url 'psicoterapia' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Psicoterapia</a>
+                <a href="{% url 'autocuidado' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Autocuidados</a>
+                <a href="{% url 'recursos' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Recursos gratuitos</a>
                 <a href="{% url 'actividades' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Actividades</a>
-                <a href="/contact" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
-                <a href="{% url 'reservar' %}" class="mt-2 mb-1 text-center text-sm font-medium bg-primary text-white px-4 py-2.5 rounded-lg hover:opacity-90 transition">Reservar hora</a>
+                <a href="{% url 'contact' %}" class="py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Sobre mí</a>
+                <a href="{% url 'reservar' %}" class="mt-2 mb-1 text-center text-sm font-medium bg-primary text-gray-900 px-4 py-2.5 rounded-lg hover:opacity-90 transition">Reservar hora</a>
             </div>
         </nav>
     </header>
@@ -143,7 +157,7 @@
                 <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
                     <div class="max-w-2xl animate__animated animate__fadeIn">
                         <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Acompañando procesos</h6>
-                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Psicoterapia</h3>
+                        <h3 class="font-serif text-3xl sm:text-5xl font-semibold text-white mb-4">Psicoterapia</h3>
                         <p class="text-white/90 mb-6">Acompañamiento psicológico basado en el autoconocimiento y buentrato</p>
                         <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'reservar' %}">Reservar</a>
                     </div>
@@ -156,9 +170,9 @@
                 <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
                     <div class="max-w-2xl animate__animated animate__fadeIn">
                         <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Jornadas para equipos de alto desgaste</h6>
-                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Autocuidado de Equipos</h3>
+                        <h3 class="font-serif text-3xl sm:text-5xl font-semibold text-white mb-4">Autocuidado de Equipos</h3>
                         <p class="text-white/90 mb-6">El autocuidado va de la mano del cuidado mutuo. Solo podemos cuidar bien lo que conocemos</p>
-                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="/autocuidadoparaequipos">Más información</a>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'autocuidadoparaequipos' %}">Más información</a>
                     </div>
                 </div>
             </div>
@@ -169,9 +183,9 @@
                 <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
                     <div class="max-w-2xl animate__animated animate__fadeIn">
                         <h6 class="text-white text-xs sm:text-sm uppercase tracking-widest mb-3">Escuela itinerante</h6>
-                        <h3 class="text-3xl sm:text-5xl font-semibold text-white mb-4">Escuela para el buentrato</h3>
+                        <h3 class="font-serif text-3xl sm:text-5xl font-semibold text-white mb-4">Escuela para el buentrato</h3>
                         <p class="text-white/90 mb-6">Promoción del Buentrato a nivel individual, relacional y social. Experiencias individuales y formación.</p>
-                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="/escuelaparaelbuentrato">Más información</a>
+                        <a class="inline-block border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition" href="{% url 'escuelaparaelbuentrato' %}">Más información</a>
                     </div>
                 </div>
             </div>
@@ -199,20 +213,20 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
                 <div>
-                    <h2 class="text-primary text-xl sm:text-2xl font-semibold mb-3">CASA DEL AMAR PENCO</h2>
+                    <h2 class="font-serif text-primary text-xl sm:text-2xl font-semibold mb-3">CASA DEL AMAR PENCO</h2>
                     <p class="text-sm text-gray-400">Promovemos el buentrato personal, relacional y comunitario.</p>
                 </div>
                 <div class="space-y-3 text-sm">
                     <a target="_blank" href="https://wa.me/56982907857" class="flex items-center gap-2 hover:text-white">
-                        <img src="{% static 'img/ws.png' %}" alt="WhatsApp" class="w-5 h-5">
+                        <i class="fab fa-whatsapp text-lg w-5 text-center"></i>
                         +56982907857
                     </a>
                     <a target="_blank" href="https://www.instagram.com/casadelamarpenco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="flex items-center gap-2 hover:text-white">
-                        <img src="{% static 'img/ig.png' %}" alt="Instagram" class="w-5 h-5">
+                        <i class="fab fa-instagram text-lg w-5 text-center"></i>
                         Instagram
                     </a>
                     <a target="_blank" href="mailto:fabidelgadosilva@gmail.com" class="flex items-center gap-2 hover:text-white">
-                        <img src="{% static 'img/gmail.png' %}" alt="Gmail" class="w-5 h-5">
+                        <i class="fas fa-envelope text-lg w-5 text-center"></i>
                         fabidelgadosilva@gmail.com
                     </a>
                 </div>
@@ -221,14 +235,34 @@
     </footer>
     <!-- Footer End -->
 
-    <!-- Back to Top (se oculta mientras se escribe en un input/select/textarea,
-         para no taparlo en formularios largos en mobile) -->
+    <!-- Back to Top: se oculta cada vez que su posición fija (esquina inferior
+         derecha) coincide con un campo de formulario o con el footer, sin
+         depender de que haya foco activo (cubre el caso de que ya tape algo
+         apenas carga la página, antes de que el usuario toque nada). -->
     <a href="#top"
-       x-data="{ ocultoPorFoco: false }"
-       @focusin.window="ocultoPorFoco = ['INPUT', 'SELECT', 'TEXTAREA'].includes($event.target.tagName)"
-       @focusout.window="ocultoPorFoco = false"
-       x-show="!ocultoPorFoco"
-       class="fixed bottom-6 right-6 z-40 h-12 w-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg hover:opacity-90 transition">
+       x-data="{
+           oculto: false,
+           actualizar() {
+               const margen = 24, tam = 48;
+               const boton = {
+                   left: window.innerWidth - margen - tam,
+                   right: window.innerWidth - margen,
+                   top: window.innerHeight - margen - tam,
+                   bottom: window.innerHeight - margen,
+               };
+               this.oculto = Array.from(document.querySelectorAll('input, select, textarea, footer, .campo-seleccionable')).some((el) => {
+                   const r = el.getBoundingClientRect();
+                   return !(boton.right < r.left || boton.left > r.right || boton.bottom < r.top || boton.top > r.bottom);
+               });
+           },
+       }"
+       x-init="actualizar()"
+       @focusin.window="actualizar()"
+       @focusout.window="actualizar()"
+       @scroll.window="actualizar()"
+       @resize.window="actualizar()"
+       x-show="!oculto"
+       class="fixed bottom-6 right-6 z-40 h-12 w-12 flex items-center justify-center rounded-full bg-primary text-gray-900 shadow-lg hover:opacity-90 transition">
         <i class="fa fa-angle-double-up"></i>
     </a>
 

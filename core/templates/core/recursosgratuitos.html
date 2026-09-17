@@ -1,22 +1,41 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
+{% block title %}Recursos gratuitos — Casa del Amar Penco{% endblock %}
+{% block meta_description %}Recursos gratuitos sobre ansiedad, depresión y otros temas de salud mental, por Casa del Amar Penco.{% endblock %}
 {% block content %}
-<br>
-<section class="container">
-    <div class="row">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Recursos</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-2">Recursos gratuitos</h1>
+    <p class="text-gray-600 leading-relaxed mb-10">
+        Material gratuito por tema, para revisar a tu ritmo.
+    </p>
+
+    {% if nuevo_recurso %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {% for x in nuevo_recurso %}
-        <div class="col-lg-4 col-md-6 col-sm-12  mb-4 ">
-            <div class="card rounded h-100">
-                <img class="card-img-top rounded" src="{{ x.image.url }}" alt="Card image cap" style="width: 100%; height: 200px;">
-                <div class="card-body text-center rounded">
-                    <h5 class="card-title">{{ x.nomM }}</h5>
-                    <p class="card-text">{{ x.desM|linebreaks }}</p>
-                    <a target="_blank" href="{{ x.url }}">Ver recursos</a></div>
-            </div>
-        </div>
+        <a href="{% if x.nomM|lower == 'ansiedad' %}{% url 'ansiedad' %}{% elif x.nomM|lower == 'depresión' %}{% url 'depresion' %}{% else %}{{ x.url }}{% endif %}"
+           class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-gray-900 mb-4">
+                {% if x.nomM|lower == 'ansiedad' %}
+                <i class="fas fa-brain text-xl"></i>
+                {% elif x.nomM|lower == 'depresión' %}
+                <i class="fas fa-cloud-rain text-xl"></i>
+                {% else %}
+                <i class="fas fa-heart text-xl"></i>
+                {% endif %}
+            </span>
+            <h3 class="font-semibold text-gray-900 mb-2">{{ x.nomM }}</h3>
+            {% if x.desM %}
+            <p class="text-sm text-gray-600">{{ x.desM|linebreaksbr }}</p>
+            {% endif %}
+            <span class="text-sm text-gray-900 font-medium mt-3 inline-flex items-center gap-1.5">
+                Ver recursos <i class="fas fa-arrow-right text-xs"></i>
+            </span>
+        </a>
         {% endfor %}
     </div>
-</section>
+    {% else %}
+    <p class="text-gray-600">Por ahora no hay recursos publicados. Vuelve a revisar pronto.</p>
+    {% endif %}
+</div>
 {% endblock %}
-
-

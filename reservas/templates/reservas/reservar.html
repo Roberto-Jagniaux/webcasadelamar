@@ -4,8 +4,8 @@
 {% block meta_description %}Reserva tu hora de psicoterapia individual, taller grupal o autocuidado con Fabiola Delgado Silva, en Penco o de forma online.{% endblock %}
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-12 sm:py-16">
-    <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Agenda</h6>
-    <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-2">Reserva tu hora</h1>
+    <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Agenda</h6>
+    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-3 mb-2">Reserva tu hora</h1>
     <p class="text-gray-600 mb-8">
         Completa el formulario y Fabiola se pondrá en contacto contigo para confirmar
         la hora y coordinar el pago.
@@ -38,15 +38,39 @@
             {{ form.convenio }}
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.tipo_sesion.id_for_label }}">Tipo de sesión</label>
-                {{ form.tipo_sesion }}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2" id="tipo_sesion_label">Tipo de sesión</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" role="radiogroup" aria-labelledby="tipo_sesion_label">
+                {% for radio in form.tipo_sesion %}
+                <label for="{{ radio.id_for_label }}" class="campo-seleccionable flex items-start gap-3 rounded-lg border border-gray-300 px-4 py-3 cursor-pointer transition has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary has-[:checked]:bg-primary/5">
+                    {{ radio.tag }}
+                    <span class="flex flex-col">
+                        <span class="font-medium text-gray-900 text-sm">
+                            {% if radio.data.value == "psicoterapia_individual" %}Psicoterapia individual
+                            {% elif radio.data.value == "taller_grupal" %}Taller grupal
+                            {% elif radio.data.value == "autocuidado" %}Autocuidado
+                            {% endif %}
+                        </span>
+                        <span class="text-xs text-gray-500">
+                            {% if radio.data.value == "psicoterapia_individual" %}60 minutos
+                            {% elif radio.data.value == "taller_grupal" %}180 minutos
+                            {% elif radio.data.value == "autocuidado" %}Duración a convenir
+                            {% endif %}
+                        </span>
+                        <span class="text-xs text-gray-400">
+                            {% if radio.data.value == "autocuidado" %}Valor a coordinar con Fabiola{% else %}Valor según tu convenio{% endif %}
+                        </span>
+                    </span>
+                </label>
+                {% endfor %}
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.modalidad.id_for_label }}">Modalidad</label>
-                {{ form.modalidad }}
-            </div>
+            {% for error in form.tipo_sesion.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.modalidad.id_for_label }}">Modalidad</label>
+            {{ form.modalidad }}
+            {% for error in form.modalidad.errors %}<p class="text-sm text-red-600 mt-1">{{ error }}</p>{% endfor %}
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -65,7 +89,7 @@
             </div>
         </div>
 
-        <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-white font-medium px-6 py-3 rounded-lg transition">
+        <button type="submit" class="w-full sm:w-auto bg-primary hover:opacity-90 text-gray-900 font-medium px-6 py-3 rounded-lg transition">
             Enviar solicitud
         </button>
     </form>

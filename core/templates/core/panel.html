@@ -4,7 +4,7 @@
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="flex items-center justify-between gap-4 flex-wrap mb-10">
         <div>
-            <h6 class="inline-block text-white text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Panel de gestión</h6>
+            <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Panel de gestión</h6>
             <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900 mt-3">Lo que necesita tu atención</h1>
         </div>
         <a href="/admin/" class="text-sm text-primary hover:underline">Ir al admin completo &rarr;</a>
@@ -48,7 +48,7 @@
                     <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha }} {{ reserva.hora }}</p>
                 </a>
                 {% if reserva.link_whatsapp %}
-                <a href="{{ reserva.link_whatsapp }}" target="_blank" class="text-sm bg-primary text-white px-3 py-1.5 rounded-lg whitespace-nowrap hover:opacity-90 transition">
+                <a href="{{ reserva.link_whatsapp }}" target="_blank" class="text-sm bg-primary text-gray-900 px-3 py-1.5 rounded-lg whitespace-nowrap hover:opacity-90 transition">
                     WhatsApp
                 </a>
                 {% else %}

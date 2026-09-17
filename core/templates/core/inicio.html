@@ -1,1 +1,70 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+{{ block.super }}
+
+<!-- Servicios -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+        <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Servicios</h6>
+        <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-gray-900 mt-3">Formas de acompañarte</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a href="{% url 'autocuidado' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <i class="fas fa-spa text-gray-900 text-2xl mb-4"></i>
+            <h3 class="font-semibold text-gray-900 mb-2">Autocuidados</h3>
+            <p class="text-sm text-gray-600">Sesiones individuales, a la medida de lo que necesites en cada momento.</p>
+        </a>
+        <a href="{% url 'psicoterapia' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <i class="fas fa-comments text-gray-900 text-2xl mb-4"></i>
+            <h3 class="font-semibold text-gray-900 mb-2">Psicoterapia individual</h3>
+            <p class="text-sm text-gray-600">Acompañamiento psicológico basado en el autoconocimiento y el buentrato.</p>
+        </a>
+        <a href="{% url 'escuelaparaelbuentrato' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <i class="fas fa-graduation-cap text-gray-900 text-2xl mb-4"></i>
+            <h3 class="font-semibold text-gray-900 mb-2">Escuela para el Buentrato</h3>
+            <p class="text-sm text-gray-600">Promoción del buentrato a nivel individual, relacional y social.</p>
+        </a>
+        <a href="{% url 'autocuidadoparaequipos' %}" class="block bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-primary transition">
+            <i class="fas fa-users text-gray-900 text-2xl mb-4"></i>
+            <h3 class="font-semibold text-gray-900 mb-2">Autocuidado para equipos</h3>
+            <p class="text-sm text-gray-600">Jornadas para equipos de alto desgaste y cuidado mutuo.</p>
+        </a>
+    </div>
+</div>
+
+<!-- Sobre Fabiola -->
+<div class="bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <img src="{% static 'img/fabi.png' %}" class="w-full max-w-sm mx-auto rounded-xl object-contain" alt="Fabiola Delgado Silva">
+            <div>
+                <h6 class="inline-block text-gray-900 text-xs uppercase tracking-widest bg-primary px-3 py-1 rounded">Sobre mí</h6>
+                <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-gray-900 mt-3 mb-4">Hola, soy Fabi</h2>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                    Soy psicóloga (Universidad de Concepción) con un enfoque holístico, y
+                    magíster en autoconocimiento, sexualidad y relaciones humanas del
+                    Instituto de Terapia de Reencuentro (Valencia, España).
+                </p>
+                <a href="{% url 'contact' %}" class="text-gray-900 font-medium hover:underline">Conóceme más &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA final -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+    <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-gray-900 mb-3">¿Lista o listo para dar el primer paso?</h2>
+    <p class="text-gray-600 mb-8">Agenda tu hora o conoce los espacios de autocuidado.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'reservar' %}" class="bg-primary text-gray-900 font-medium px-6 py-3 rounded-lg hover:opacity-90 transition">
+            Reservar hora
+        </a>
+        <a href="{% url 'autocuidado' %}" class="border border-primary text-gray-900 font-medium px-6 py-3 rounded-lg hover:bg-primary hover:text-gray-900 transition">
+            Conocer Autocuidados
+        </a>
+    </div>
+</div>
+
+{% endblock %}

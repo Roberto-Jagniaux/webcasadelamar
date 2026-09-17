@@ -14,12 +14,6 @@ def autocuidados(request):
 
 
 
-#def galeria_view(request, id_a):
- #   autocuidado = get_object_or_404(autocuidados, id_a=id_a)
-  #  galeria = autocuidado.imagenes.all()  # Gracias al related_name en la relación
-
-   # return render(request, "core/galeria.html", {'galeria': galeria,'autocuidado':ID})
-
 def galeria_view(request, id_a):
     # Recuperar el objeto autocuidados correspondiente
     autocuidado = get_object_or_404(autocuidados_a, id_a=id_a)
