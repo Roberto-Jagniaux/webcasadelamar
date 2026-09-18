@@ -25,7 +25,7 @@
     <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-gray-900 mt-1 mb-4">{{ actividad.titulo }}</h1>
 
     <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 mb-6">
-        <span class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.fecha }} · {{ actividad.hora }}</span>
+        <span class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.fecha|date:"d-m-Y" }} · {{ actividad.hora|time:"H:i" }}</span>
         <span class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 text-xs w-3.5 shrink-0"></i>{{ actividad.lugar_modalidad }}</span>
         <span>Dirigido a: {{ actividad.publico_objetivo }}</span>
         <span>
@@ -50,6 +50,7 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Inscríbete</h2>
         <form method="post" class="space-y-4">
             {% csrf_token %}
+            {{ form.empresa }}
             {% if form.non_field_errors %}
             <p class="text-sm text-red-600">{{ form.non_field_errors.0 }}</p>
             {% endif %}

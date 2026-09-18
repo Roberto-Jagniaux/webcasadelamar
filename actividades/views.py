@@ -2,19 +2,21 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from core.ratelimit import demasiados_intentos
+
 from .forms import InscripcionForm
 from .models import Actividad, Inscripcion
 
 
 def listado(request):
-    actividades = Actividad.objects.filter(
+    actividades = Actividad.objects.con_conteos().filter(
         activa=True, fecha__gte=timezone.now().date()
     )
     return render(request, "actividades/listado.html", {"actividades": actividades})
 
 
 def pasadas(request):
-    actividades = Actividad.objects.filter(
+    actividades = Actividad.objects.con_conteos().filter(
         activa=True, fecha__lt=timezone.now().date()
     )
     return render(request, "actividades/pasadas.html", {"actividades": actividades})
@@ -32,6 +34,13 @@ def detalle(request, pk):
         )
 
     if request.method == "POST":
+        if demasiados_intentos(request, "inscripcion"):
+            messages.error(
+                request,
+                "Recibimos demasiadas solicitudes desde tu conexión en poco "
+                "tiempo. Espera unos minutos e inténtalo de nuevo.",
+            )
+            return redirect("actividad_detalle", pk=pk)
         form = InscripcionForm(request.POST, actividad=actividad)
         if form.is_valid():
             inscripcion = form.save()

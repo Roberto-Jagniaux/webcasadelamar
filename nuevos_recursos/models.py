@@ -1,5 +1,8 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django import forms
+
+from core.validators import validar_tamano_imagen, validar_tamano_pdf
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -9,7 +12,15 @@ class MultipleFileInput(forms.ClearableFileInput):
 class nuevos_recursos(models.Model):
     nomM = models.CharField(max_length=80,verbose_name="Nombre de Material")
     desM = models.TextField(blank=True, verbose_name="Descripción")
-    image = models.ImageField(upload_to="projects",null=True,blank=True)
+    image = models.ImageField(
+        upload_to="projects",
+        null=True,
+        blank=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+            validar_tamano_imagen,
+        ],
+    )
     url = models.URLField(blank=True, verbose_name="URL")  # Campo para la URL completa
 
     class Meta:
@@ -24,7 +35,14 @@ class nuevos_recursos(models.Model):
 class archivos(models.Model):
     nomA = models.CharField(max_length=60,verbose_name="Nombre de Archivo")
     desA = models.TextField(verbose_name="Descripción Archivo")
-    file_upload = models.FileField(upload_to="files",verbose_name="archivo")
+    file_upload = models.FileField(
+        upload_to="files",
+        verbose_name="archivo",
+        validators=[
+            FileExtensionValidator(allowed_extensions=["pdf"]),
+            validar_tamano_pdf,
+        ],
+    )
     categoria = models.ForeignKey(
         nuevos_recursos,
         on_delete=models.CASCADE,

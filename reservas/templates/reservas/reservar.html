@@ -13,6 +13,7 @@
 
     <form method="post" class="space-y-5" x-data='reservaForm({{ fechas_bloqueadas_json|safe }})'>
         {% csrf_token %}
+        {{ form.empresa }}
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1" for="{{ form.nombre.id_for_label }}">Nombre completo</label>

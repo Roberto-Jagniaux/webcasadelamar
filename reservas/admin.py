@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from .models import Cliente, Reserva, BloqueoFecha
-from .services import whatsapp_link_pago
+from .services import telefono_pago_invalido, whatsapp_link_pago
 
 
 @admin.register(Cliente)
@@ -43,21 +43,31 @@ class ReservaAdmin(admin.ModelAdmin):
     @admin.display(description="Coordinar pago")
     def coordinar_pago(self, reserva):
         link = whatsapp_link_pago(reserva)
-        if not link:
-            return "sin teléfono"
-        return format_html('<a href="{}" target="_blank">WhatsApp</a>', link)
+        if link:
+            return format_html('<a href="{}" target="_blank">WhatsApp</a>', link)
+        if telefono_pago_invalido(reserva):
+            return format_html(
+                '<span title="{}">teléfono inválido</span>', reserva.cliente.telefono
+            )
+        return "sin teléfono"
 
     @admin.display(description="Link de WhatsApp para coordinar el pago")
     def link_whatsapp_pago(self, reserva):
         if not reserva.pk:
             return "Disponible después de guardar la reserva."
         link = whatsapp_link_pago(reserva)
-        if not link:
-            return "El cliente no tiene teléfono registrado."
-        return format_html(
-            '<a href="{}" target="_blank">Abrir WhatsApp con mensaje pre-armado</a>',
-            link,
-        )
+        if link:
+            return format_html(
+                '<a href="{}" target="_blank">Abrir WhatsApp con mensaje pre-armado</a>',
+                link,
+            )
+        if telefono_pago_invalido(reserva):
+            return format_html(
+                'El teléfono guardado ("{}") no tiene formato de celular chileno '
+                "válido — corrígelo en la ficha del cliente.",
+                reserva.cliente.telefono,
+            )
+        return "El cliente no tiene teléfono registrado."
 
 
 @admin.register(BloqueoFecha)

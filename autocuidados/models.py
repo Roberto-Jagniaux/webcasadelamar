@@ -1,6 +1,14 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.html import format_html
+
+from core.validators import validar_tamano_imagen
+
+IMAGEN_VALIDATORS = [
+    FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+    validar_tamano_imagen,
+]
 
 
 
@@ -8,7 +16,7 @@ from django.utils.html import format_html
 class autocuidados(models.Model):
     id_a = models.CharField(primary_key=True,max_length=10, verbose_name="ID autocuidado",default="0")
     clienteA = models.CharField(max_length=80,verbose_name="cliente autocuidado",default="sin asignar")
-    image = models.ImageField(upload_to="projects")
+    image = models.ImageField(upload_to="projects", validators=IMAGEN_VALIDATORS)
     desA = models.TextField(verbose_name="Descripcion")
     lugarA = models.CharField(max_length=20,verbose_name="Lugar autocuidado",default="sin asignar")
     fechaA = models.DateField(default=timezone.now)  # Para un campo solo de fecha    
@@ -28,7 +36,7 @@ class autocuidados(models.Model):
         return f"Id autocuidado= {self.id_a}-Nombre cliente= {self.clienteA}"
 
 class galeria(models.Model):
-    image = models.ImageField(upload_to="autocuidados")
+    image = models.ImageField(upload_to="autocuidados", validators=IMAGEN_VALIDATORS)
     autocuidado = models.ForeignKey(
         autocuidados,
         on_delete=models.CASCADE,

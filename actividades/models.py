@@ -1,6 +1,37 @@
-from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator, MinValueValidator
+from django.db import models, transaction
+from django.db.models import Count, F, Q
 from django.utils import timezone
+
+from core.validators import validar_tamano_imagen
 from reservas.models import Cliente
+
+
+class ActividadQuerySet(models.QuerySet):
+    def con_conteos(self):
+        """
+        Precalcula cupos_ocupados y en_lista_espera con un único query de
+        agregación (Count condicional), en vez de que cada actividad de la
+        lista dispare su propio SELECT COUNT al acceder a esas properties
+        (N+1: antes, listar 20 actividades eran 20+ queries extra).
+
+        Los nombres van con guion bajo y sufijo "_anotado" a propósito: no
+        pueden llamarse igual que las properties del modelo (cupos_ocupados,
+        en_lista_espera) — Django intenta hacer setattr() del valor anotado
+        sobre cada instancia, y una property sin setter revienta con
+        AttributeError al recibirlo.
+        """
+        return self.annotate(
+            _cupos_ocupados_anotado=Count(
+                "inscripciones",
+                filter=Q(inscripciones__estado=Inscripcion.ESTADO_CONFIRMADA),
+            ),
+            _en_lista_espera_anotado=Count(
+                "inscripciones",
+                filter=Q(inscripciones__estado=Inscripcion.ESTADO_LISTA_ESPERA),
+            ),
+        )
 
 
 class Actividad(models.Model):
@@ -42,7 +73,15 @@ class Actividad(models.Model):
     fecha_cierre_inscripciones = models.DateField(
         verbose_name="Fecha de cierre de inscripciones"
     )
-    imagen = models.ImageField(upload_to="actividades", null=True, blank=True)
+    imagen = models.ImageField(
+        upload_to="actividades",
+        null=True,
+        blank=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+            validar_tamano_imagen,
+        ],
+    )
     tipo_retribucion = models.CharField(
         max_length=15,
         choices=RETRIBUCION_CHOICES,
@@ -54,10 +93,13 @@ class Actividad(models.Model):
         decimal_places=0,
         null=True,
         blank=True,
+        validators=[MinValueValidator(0)],
         verbose_name="Valor (si es pago o sugerencia de donación)",
     )
     activa = models.BooleanField(default=True, verbose_name="Publicada")
     creada_en = models.DateTimeField(default=timezone.now)
+
+    objects = ActividadQuerySet.as_manager()
 
     class Meta:
         verbose_name = "actividad"
@@ -67,8 +109,18 @@ class Actividad(models.Model):
     def __str__(self):
         return f"{self.titulo} ({self.fecha})"
 
+    def clean(self):
+        super().clean()
+        if self.tipo_retribucion == self.RETRIBUCION_PAGO and not self.valor:
+            raise ValidationError(
+                {"valor": "Si la actividad es de pago, indica un valor mayor a 0."}
+            )
+
     @property
     def cupos_ocupados(self):
+        anotado = getattr(self, "_cupos_ocupados_anotado", None)
+        if anotado is not None:
+            return anotado
         return self.inscripciones.filter(estado=Inscripcion.ESTADO_CONFIRMADA).count()
 
     @property
@@ -77,6 +129,9 @@ class Actividad(models.Model):
 
     @property
     def en_lista_espera(self):
+        anotado = getattr(self, "_en_lista_espera_anotado", None)
+        if anotado is not None:
+            return anotado
         return self.inscripciones.filter(estado=Inscripcion.ESTADO_LISTA_ESPERA).count()
 
     @property
@@ -118,9 +173,21 @@ class Inscripcion(models.Model):
     def save(self, *args, **kwargs):
         # Si ya no hay cupos disponibles, la inscripción entra en lista de espera.
         if self.pk is None and self.estado == self.ESTADO_CONFIRMADA:
-            if self.actividad.cupos_disponibles <= 0:
-                self.estado = self.ESTADO_LISTA_ESPERA
-        super().save(*args, **kwargs)
+            with transaction.atomic():
+                # UPDATE "vacío" primero: fuerza a SQLite a tomar el lock de
+                # escritura de inmediato, antes de leer cupos_disponibles.
+                # select_for_update() no sirve acá — SQLite no tiene locks
+                # por fila, y probado que una segunda inscripción casi
+                # simultánea termina en OperationalError("database is
+                # locked") en vez de esperar su turno. Con este UPDATE, la
+                # segunda queda bloqueada hasta que la primera termine de
+                # guardar, y entonces sí lee el cupo ya ocupado.
+                Actividad.objects.filter(pk=self.actividad_id).update(cupos=F("cupos"))
+                if self.actividad.cupos_disponibles <= 0:
+                    self.estado = self.ESTADO_LISTA_ESPERA
+                super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.cliente.nombre} → {self.actividad.titulo} ({self.get_estado_display()})"

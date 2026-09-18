@@ -13,6 +13,22 @@ INPUT_CLASSES = (
 
 
 class InscripcionForm(forms.Form):
+    # Honeypot: campo invisible para personas, que un bot de envío
+    # automático sí suele completar. No hay CAPTCHA configurado (falta
+    # credencial de reCAPTCHA/hCaptcha, mismo bloqueo que las notificaciones
+    # por email) — esta es la defensa real contra bots simples.
+    empresa = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "off",
+                "tabindex": "-1",
+                "style": "position:absolute; left:-9999px; width:1px; height:1px;",
+                "aria-hidden": "true",
+            }
+        ),
+    )
     nombre = forms.CharField(
         max_length=120,
         label="Nombre completo",
@@ -36,6 +52,11 @@ class InscripcionForm(forms.Form):
     def __init__(self, *args, actividad=None, **kwargs):
         self.actividad = actividad
         super().__init__(*args, **kwargs)
+
+    def clean_empresa(self):
+        if self.cleaned_data.get("empresa"):
+            raise forms.ValidationError("No se pudo procesar la solicitud.")
+        return self.cleaned_data.get("empresa")
 
     def clean_email(self):
         email = self.cleaned_data["email"]

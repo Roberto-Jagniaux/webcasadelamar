@@ -22,7 +22,7 @@
             <a href="/admin/reservas/reserva/{{ reserva.pk }}/change/" class="flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50 transition">
                 <div>
                     <p class="font-medium text-gray-900">{{ reserva.cliente.nombre }}</p>
-                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha }} {{ reserva.hora }} · {{ reserva.get_modalidad_display }}</p>
+                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha|date:"d-m-Y" }} {{ reserva.hora|time:"H:i" }} · {{ reserva.get_modalidad_display }}</p>
                 </div>
                 <span class="text-sm text-primary whitespace-nowrap">Revisar &rarr;</span>
             </a>
@@ -45,12 +45,14 @@
             <div class="flex items-center justify-between gap-4 px-5 py-4">
                 <a href="/admin/reservas/reserva/{{ reserva.pk }}/change/" class="hover:underline">
                     <p class="font-medium text-gray-900">{{ reserva.cliente.nombre }}</p>
-                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha }} {{ reserva.hora }}</p>
+                    <p class="text-sm text-gray-600">{{ reserva.get_tipo_sesion_display }} · {{ reserva.fecha|date:"d-m-Y" }} {{ reserva.hora|time:"H:i" }}</p>
                 </a>
                 {% if reserva.link_whatsapp %}
                 <a href="{{ reserva.link_whatsapp }}" target="_blank" class="text-sm bg-primary text-gray-900 px-3 py-1.5 rounded-lg whitespace-nowrap hover:opacity-90 transition">
                     WhatsApp
                 </a>
+                {% elif reserva.telefono_invalido %}
+                <span class="text-xs text-amber-700 whitespace-nowrap" title="{{ reserva.cliente.telefono }}">teléfono inválido</span>
                 {% else %}
                 <span class="text-xs text-gray-400 whitespace-nowrap">sin teléfono</span>
                 {% endif %}
@@ -74,7 +76,7 @@
             <a href="/admin/actividades/actividad/{{ actividad.pk }}/change/" class="flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50 transition">
                 <div>
                     <p class="font-medium text-gray-900">{{ actividad.titulo }}</p>
-                    <p class="text-sm text-gray-600">{{ actividad.fecha }} · {{ actividad.cupos_disponibles }} cupos disponibles</p>
+                    <p class="text-sm text-gray-600">{{ actividad.fecha|date:"d-m-Y" }} · {{ actividad.cupos_disponibles }} cupos disponibles</p>
                 </div>
                 <span class="text-sm text-primary whitespace-nowrap">{{ actividad.en_lista_espera }} en espera &rarr;</span>
             </a>

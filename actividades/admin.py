@@ -19,6 +19,11 @@ class ActividadAdmin(admin.ModelAdmin):
     date_hierarchy = "fecha"
     inlines = [InscripcionInline]
 
+    def get_queryset(self, request):
+        # cupos_disponibles y en_lista_espera del list_display disparaban un
+        # query por fila; con_conteos() los precalcula en un solo query.
+        return super().get_queryset(request).con_conteos()
+
 
 @admin.register(Inscripcion)
 class InscripcionAdmin(admin.ModelAdmin):

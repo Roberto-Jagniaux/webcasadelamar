@@ -4,12 +4,21 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
+from core.ratelimit import demasiados_intentos
+
 from .forms import ReservaForm
 from .models import BloqueoFecha, Reserva
 
 
 def reservar(request):
     if request.method == "POST":
+        if demasiados_intentos(request, "reservar"):
+            messages.error(
+                request,
+                "Recibimos demasiadas solicitudes desde tu conexión en poco "
+                "tiempo. Espera unos minutos e inténtalo de nuevo.",
+            )
+            return redirect("reservar")
         form = ReservaForm(request.POST)
         if form.is_valid():
             form.save()

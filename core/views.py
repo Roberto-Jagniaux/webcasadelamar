@@ -5,7 +5,7 @@ from django.utils import timezone
 from actividades.models import Actividad
 from autocuidados.models import autocuidados as AutocuidadoEquipo
 from reservas.models import Reserva
-from reservas.services import whatsapp_link_pago
+from reservas.services import telefono_pago_invalido, whatsapp_link_pago
 
 # Create your views here.
 
@@ -22,14 +22,13 @@ def panel(request):
 
     for reserva in reservas_sin_pago:
         reserva.link_whatsapp = whatsapp_link_pago(reserva)
+        reserva.telefono_invalido = telefono_pago_invalido(reserva)
 
-    actividades_con_espera = [
-        actividad
-        for actividad in Actividad.objects.filter(
-            activa=True, fecha__gte=timezone.now().date()
-        )
-        if actividad.en_lista_espera > 0
-    ]
+    actividades_con_espera = Actividad.objects.con_conteos().filter(
+        activa=True,
+        fecha__gte=timezone.now().date(),
+        _en_lista_espera_anotado__gt=0,
+    ).order_by("fecha")
 
     return render(
         request,

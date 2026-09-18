@@ -28,19 +28,54 @@ tailwind.config = {
 // enganchado de inmediato — mucho antes de que el script de Alpine (que sí
 // tiene "defer") llegue a ejecutarse y dispare ese evento.
 document.addEventListener('alpine:init', () => {
-    // Menú hamburguesa del header (mobile/tablet).
+    // Menú hamburguesa del header (mobile/tablet). Además de mostrar/ocultar,
+    // maneja foco y teclado: al abrir, mueve el foco al primer link del
+    // menú; al cerrar (con Escape, clic afuera o un link), devuelve el foco
+    // al botón que lo abrió. Antes solo cerraba con @click.outside — un
+    // usuario de teclado no tenía forma de cerrarlo con Escape.
     Alpine.data('mobileMenu', () => ({
         mobileMenuOpen: false,
+        abrir() {
+            this.mobileMenuOpen = true;
+            this.$nextTick(() => {
+                this.$refs.menuMobile?.querySelector('a, button')?.focus();
+            });
+        },
+        cerrar() {
+            if (!this.mobileMenuOpen) return;
+            this.mobileMenuOpen = false;
+            this.$refs.menuToggleBtn?.focus();
+        },
+        alternar() {
+            if (this.mobileMenuOpen) {
+                this.cerrar();
+            } else {
+                this.abrir();
+            }
+        },
     }));
 
-    // Carrusel del hero (home). Rota de slide cada 6 segundos.
+    // Carrusel del hero (home). Rota de slide cada 6 segundos. El
+    // temporizador se reinicia cada vez que el usuario navega a mano (flechas
+    // o puntos) — si no se reinicia, el avance automático puede caer justo
+    // después de un clic manual y las dos transiciones chocan, dejando la
+    // imagen "pegada" a medio camino (opacidad a medio interpolar).
     Alpine.data('heroCarousel', () => ({
         slide: 0,
         total: 3,
+        intervalId: null,
         init() {
-            setInterval(() => {
+            this.reiniciarAutoavance();
+        },
+        reiniciarAutoavance() {
+            clearInterval(this.intervalId);
+            this.intervalId = setInterval(() => {
                 this.slide = (this.slide + 1) % this.total;
             }, 6000);
+        },
+        ir(n) {
+            this.slide = ((n % this.total) + this.total) % this.total;
+            this.reiniciarAutoavance();
         },
     }));
 
